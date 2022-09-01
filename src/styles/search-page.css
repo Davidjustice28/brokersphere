@@ -1,0 +1,21 @@
+#about-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+#about-screen img {
+    width:100%;
+    height: auto;
+}
+
+#about-screen h1 {
+    text-align: center;
+}
+
+#about-screen p {
+    text-align: center;
+    width:85%;
+    font-size: 22px;
+}
