@@ -14,7 +14,7 @@ class AboutScreen extends Component {
         return (
             <div id="about-screen">
                 <Header leftIcon = "arrow_back" pageName ="What is Brokersphere" backFunc ={this.props.backFunc}/>                
-                <img src={Photo}></img>
+                <img src={Photo} alt="user"></img>
                 <h1>Agents Supporting Agents</h1>
                 <p>
                     Brokersphere was created with only real

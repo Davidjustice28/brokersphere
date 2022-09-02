@@ -17,8 +17,27 @@ class App extends Component {
       agentsearchpage: false,
       leadpage:false,
       referralpage:false,
-      conversationpage: false
+      conversationpage: false,
+      referrals: [
+        {
+          Agent: "David Justice",
+          Type: "Buyer",
+          Location: "Cherry Hill",
+          Financing: "FHA",
+          Budget: 250000,
+        },
+        {
+          Agent: "Ryan Serhant",
+          Type: "Buyer",
+          Location: "New York",
+          Financing: "VA",
+          Budget: 500000
+        },
+      ],
+  
     }
+
+    this.displayPage = this.displayPage.bind(this)
     this.displayAboutPage = this.displayAboutPage.bind(this)
     this.displayDashboard = this.displayDashboard.bind(this)
     this.displayMyProfile = this.displayMyProfile.bind(this)
@@ -26,6 +45,11 @@ class App extends Component {
     this.displayLeadPage = this.displayLeadPage.bind(this)
     this.displayReferralPage = this.displayReferralPage.bind(this)
     this.displayConversationPage = this.displayConversationPage.bind(this)
+  }
+
+  displayPage(page) {
+    console.log(`the current page should be ${page}`)
+    this.setState({currentPage: page})
   }
 
   displayAboutPage() {
@@ -37,6 +61,7 @@ class App extends Component {
     console.log("Back button is working")
     this.setState({aboutpage:false, userprofile:false, dashboard:true})
   }
+
   displayMyProfile() {
     console.log("Profile button is working")
     this.setState({aboutpage:false, dashboard: false, userprofile: true})
@@ -56,6 +81,7 @@ class App extends Component {
     console.log("Referral page button is working")
     this.setState({referralpage:true, leadpage: false, agentsearchpage: false, aboutpage: false, dashboard: false, userprofile:false})
   }
+
   displayConversationPage() {
     console.log("Conversation page button is working")
     this.setState({conversationpage:true, referralpage:false, leadpage: false, agentsearchpage: false, aboutpage: false, dashboard: false, userprofile:false})
@@ -65,22 +91,22 @@ class App extends Component {
       if(this.state.dashboard  === true) {
         return <Dashboard aboutFunc = {this.displayAboutPage} profileFunc ={this.displayMyProfile} searchFunc = {this.displayAgentSearchPage} leadFunc = {this.displayLeadPage} referralFunc ={this.displayReferralPage} conversationFunc = {this.displayConversationPage}/>
       }
-      if(this.state.aboutpage === true) {
+      else if(this.state.aboutpage === true) {
         return <AboutScreen backFunc = {this.displayDashboard}/>
       }
-      if(this.state.userprofile === true) {
+      else if(this.state.userprofile === true) {
         return <LoggedInUserProfile backFunc = {this.displayDashboard}/>
       }
-      if(this.state.agentsearchpage === true) {
+      else if(this.state.agentsearchpage === true) {
         return <AgentSearchPage backFunc = {this.displayDashboard}/>
       }
-      if(this.state.leadpage === true) {
+      else if(this.state.leadpage === true) {
         return <LeadPage backFunc = {this.displayDashboard}/>
       }
-      if(this.state.referralpage === true) {
-        return <ReferralPage backFunc = {this.displayDashboard}/>
+      else if(this.state.referralpage === true) {
+        return <ReferralPage backFunc = {this.displayDashboard} referrals = {this.state.referrals}/>
       }
-      if(this.state.conversationpage === true) {
+      else if(this.state.conversationpage === true) {
         return <ConversationPage backFunc = {this.displayDashboard}/>
       }
   }
