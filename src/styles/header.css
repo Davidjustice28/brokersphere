@@ -34,4 +34,9 @@
         right: 30px;
     }
 
+    h1 {
+        position: relative;
+        right: 25px;
+    }
+
 }

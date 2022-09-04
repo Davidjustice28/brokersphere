@@ -27,7 +27,7 @@ class Dashboard extends Component {
                     <button onClick={this.props.leadFunc}>LEADS</button>
                 </div>
                 <footer>
-                    <p>Log Out</p>
+                    <p onClick={this.props.logout}>Log Out</p>
                 </footer>
             </div>
         )

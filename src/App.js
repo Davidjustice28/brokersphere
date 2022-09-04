@@ -1,4 +1,5 @@
 import { Component } from "react";
+import LoginPage from "./components/pages/login-page";
 import Dashboard from "./components/dashboard";
 import AboutScreen from "./components/about-screen";
 import LoggedInUserProfile from "./components/pages/user-profile";
@@ -12,6 +13,19 @@ class App extends Component {
   constructor() {
     super()
     this.state = {
+      users: [
+        {
+          Name: "David Justice",
+          Username: "officialdavidjustice",
+          Password: "Jade2021!"
+        },
+        {
+          Name: "Lina Justice",
+          Username: "linajustice",
+          Password: "Seattle2022!"
+        }
+      ],
+      loggedIn:false,
       dashboard: true,
       aboutpage: false,
       userprofile: false,
@@ -36,6 +50,7 @@ class App extends Component {
           Budget: 500000
         },
       ],
+
   
     }
 
@@ -49,6 +64,8 @@ class App extends Component {
     this.displayConversationPage = this.displayConversationPage.bind(this)
     this.displayNewreferralPage = this.displayNewreferralPage.bind(this)
     this.createReferral = this.createReferral.bind(this)
+    this.loginUser = this.loginUser.bind(this)
+    this.logoutUser = this.logoutUser.bind(this)
   }
 
   displayPage(page) {
@@ -111,9 +128,21 @@ class App extends Component {
    }
   }
 
+  loginUser() {
+    this.setState({loggedIn:true})
+  }
+
+  logoutUser() {
+    this.setState({loggedIn:false})
+  }
+
   render() {
+      console.log(this.state.users)
+      if(this.state.loggedIn === false) {
+        return <LoginPage func = {this.loginUser}/>
+      }else {
       if(this.state.dashboard  === true) {
-        return <Dashboard aboutFunc = {this.displayAboutPage} profileFunc ={this.displayMyProfile} searchFunc = {this.displayAgentSearchPage} leadFunc = {this.displayLeadPage} referralFunc ={this.displayReferralPage} conversationFunc = {this.displayConversationPage}/>
+        return <Dashboard aboutFunc = {this.displayAboutPage} profileFunc ={this.displayMyProfile} searchFunc = {this.displayAgentSearchPage} leadFunc = {this.displayLeadPage} referralFunc ={this.displayReferralPage} conversationFunc = {this.displayConversationPage} logout = {this.logoutUser}/>
       }
       else if(this.state.aboutpage === true) {
         return <AboutScreen backFunc = {this.displayDashboard}/>
@@ -136,6 +165,7 @@ class App extends Component {
       else if(this.state.newreferralpage === true) {
         return <NewReferralForm backFunc = {this.displayReferralPage} createFunc = {this.createReferral}/>
       }
+  }
   }
 }
 
