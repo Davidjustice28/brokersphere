@@ -1,0 +1,28 @@
+#new-referral {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+form {
+    position: relative;
+    top:25px;
+    display: flex;
+    flex-direction: column;
+    border:2px solid green;
+    width:95%;
+    gap:10px;
+}
+
+input {
+    font-size: 25px
+}
+
+button {
+    background-color: blue;
+    color:white;
+    font-size: 25px;
+    border-radius: 3px;
+    border: 1px solid black;
+}

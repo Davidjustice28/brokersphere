@@ -14,20 +14,49 @@ h1 {
     border-radius: 5px;
     box-shadow: 0px 2px 3px gray;
     width: 95%;
+    height:100px;
 
 }
 
 .referral div:nth-child(1) {
     display: flex;
     justify-content: space-evenly;
-    gap:175px;
+    gap:125px;
     font-weight: bold;
-    
+}
+
+@media(max-width: 400px) {
+    .referral div:nth-child(1) {
+        gap:20vw;
+    }
 }
 
 .referral div:nth-child(2) {
     display: flex;
     justify-content: space-evenly;
-    gap:100px;
 }
 
+@media(min-width: 401px) {
+    .referral div:nth-child(2) {
+        gap:100px;
+    }
+}
+
+#referral-addbutton {
+    width:60px;
+    height:60px;
+    border-radius: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position:fixed;
+    bottom:25px;
+    left:85%;
+    background-color: blue;
+}
+#referral-addbutton:active {
+    transform: scale(1.1);
+}
+#referral-addbutton span {
+    transform: scale(1.5);
+}

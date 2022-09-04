@@ -24,13 +24,16 @@ class ReferralPage extends Component {
                                 <p>Type: {referral.Type}</p>
                             </div>
                             <div>
-                                <p>Location</p>
+                                <p>{referral.Location}</p>
                                 <p>{referral.Financing}</p>
                                 <p>${referral.Budget}</p>
                             </div>
                         </div>
                     )
                 })}
+                </div>
+                <div id="referral-addbutton">
+                                <span className="material-symbols-outlined" onClick={this.props.addFunc}>add</span>
                 </div>
             </div>
         )
