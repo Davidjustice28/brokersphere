@@ -8,6 +8,9 @@ import LeadPage from "./components/pages/leads-page";
 import ReferralPage from "./components/pages/referrals-page";
 import ConversationPage from "./components/pages/conversations-page";
 import NewReferralForm from "./components/pages/new-referralform";
+import SignupPage from "./components/pages/signup-page";
+import Photo1 from "./components/images/david-justice.jpg";
+import Photo2 from "./components/images/IMG_1049.jpg";
 
 class App extends Component {
   constructor() {
@@ -17,13 +20,11 @@ class App extends Component {
         {
           Name: "David Justice",
           Username: "officialdavidjustice",
-          Password: "Jade2021!"
+          Email: "example@email.com",
+          Password: "Jade2021!",
+          Photo: Photo1,
+          Bio: "NJ Realtor and Founder of Brokersphere"
         },
-        {
-          Name: "Lina Justice",
-          Username: "linajustice",
-          Password: "Seattle2022!"
-        }
       ],
       loggedIn:false,
       dashboard: true,
@@ -34,6 +35,7 @@ class App extends Component {
       referralpage:false,
       conversationpage: false,
       newreferralpage: false,
+      signuppage: false,
       referrals: [
         {
           Agent: "David Justice",
@@ -63,9 +65,12 @@ class App extends Component {
     this.displayReferralPage = this.displayReferralPage.bind(this)
     this.displayConversationPage = this.displayConversationPage.bind(this)
     this.displayNewreferralPage = this.displayNewreferralPage.bind(this)
+    this.signupOrLogin = this.signupOrLogin.bind(this)
     this.createReferral = this.createReferral.bind(this)
+    this.createUser = this.createUser.bind(this)
     this.loginUser = this.loginUser.bind(this)
     this.logoutUser = this.logoutUser.bind(this)
+    this.getUser = this.getUser.bind(this)
   }
 
   displayPage(page) {
@@ -113,6 +118,16 @@ class App extends Component {
     this.setState({newreferralpage: true, conversationpage:false, referralpage:false, leadpage: false, agentsearchpage: false, aboutpage: false, dashboard: false, userprofile:false})
   }
 
+  signupOrLogin() {
+    if(this.state.signuppage === true) {
+      this.setState({signuppage:false})
+    }else {
+      this.setState({signuppage:true})
+    }
+  }
+
+
+
   createReferral() {
     if(!(document.getElementById("agent-input").innerText == null)) {
       this.setState({referrals: this.state.referrals.concat({
@@ -128,18 +143,58 @@ class App extends Component {
    }
   }
 
+  createUser() {
+    return new Promise((resolve, reject) => {
+      if(!(document.getElementById("email-signup").innerText == null)) {
+        this.setState({users: this.state.users.concat({
+          Name: document.getElementById("fullname-signup").value,
+          Username: document.getElementById("username-signup").value,
+          Email: document.getElementById("email-signup").value,
+          Password: document.getElementById("password-signup").value,
+          Bio: document.getElementById("bio-signup").value,
+          Photo: Photo2
+        }) })
+        resolve(this.state.users)
+      
+      }else {
+        return
+     }
+    }).then((array) => {
+      setTimeout(() => {
+        this.setState({LoggedUser:this.state.users[this.state.users.length -1]}) 
+      }, 1000);
+    }).then(() => {
+      console.log(this.state.LoggedUser)
+      this.loginUser()
+    })
+  }
+
+  
   loginUser() {
     this.setState({loggedIn:true})
   }
 
   logoutUser() {
     this.setState({loggedIn:false})
+    this.setState({LoggedUser: null})
+  }
+
+  getUser() {
+    this.state.users.forEach(element => {
+        if(element.Email === document.getElementById("email-login").value && element.Password === document.getElementById("password-login").value) {
+            this.setState({LoggedUser: element})
+            this.loginUser()
+        }
+    });
   }
 
   render() {
-      console.log(this.state.users)
-      if(this.state.loggedIn === false) {
-        return <LoginPage func = {this.loginUser}/>
+      if(this.state.loggedIn === false ) {
+        if(this.state.signuppage === false) {
+        return <LoginPage func = {this.getUser} array = {this.state.users} func2 ={this.signupOrLogin} />
+        }else{
+          return <SignupPage func1 ={this.createUser} func2 = {this.signupOrLogin} />
+        }
       }else {
       if(this.state.dashboard  === true) {
         return <Dashboard aboutFunc = {this.displayAboutPage} profileFunc ={this.displayMyProfile} searchFunc = {this.displayAgentSearchPage} leadFunc = {this.displayLeadPage} referralFunc ={this.displayReferralPage} conversationFunc = {this.displayConversationPage} logout = {this.logoutUser}/>
@@ -148,7 +203,7 @@ class App extends Component {
         return <AboutScreen backFunc = {this.displayDashboard}/>
       }
       else if(this.state.userprofile === true) {
-        return <LoggedInUserProfile backFunc = {this.displayDashboard}/>
+        return <LoggedInUserProfile backFunc = {this.displayDashboard} user = {this.state.LoggedUser}/>
       }
       else if(this.state.agentsearchpage === true) {
         return <AgentSearchPage backFunc = {this.displayDashboard}/>

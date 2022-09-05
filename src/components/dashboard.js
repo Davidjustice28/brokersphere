@@ -25,10 +25,8 @@ class Dashboard extends Component {
                     <button onClick={this.props.referralFunc}>REFERRALS</button>
                     <button onClick={this.props.aboutFunc}>ABOUT US</button>
                     <button onClick={this.props.leadFunc}>LEADS</button>
+                    <button id="logout-button" onClick={this.props.logout}>Log Out</button>
                 </div>
-                <footer>
-                    <p onClick={this.props.logout}>Log Out</p>
-                </footer>
             </div>
         )
     }

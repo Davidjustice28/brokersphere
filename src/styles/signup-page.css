@@ -1,45 +1,53 @@
-#login-page {
+#signup-page {
     display:flex;
     flex-direction: column;
     align-items: center;
 }
 
-#login-page img {
+#signup-page img {
     width: 60%;
     height: auto;
     margin-left: auto;
     margin-right: auto;
+    margin-top: -25px;
 }
 
-#login-page h1 {
+#signup-page h1 {
     color: blue;
     text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 25px;
+    margin-top: -25px;
 }
-#login-page form {
+#signup-page form {
     display: flex;
     flex-direction: column;
     width:90%;
+    margin-top: -25px;
     border:none;
 }
 
-#login-page p {
+#signup-page p {
     position: relative;
-    top: 30vh;
     text-align: center;
     color: blue;
+    top:50px;
 }
 
-#login-page label {
+#signup-page label {
     color: blue;
 }
 
-#login-page input {
+#signup-page input {
     background-color: blue;
     color: white;
 }
 
-#login-page button {
+#signup-page button {
     background-color: lightblue;
     color: white;
     border-radius: 10px;
+    position: relative;
+    top:25px;
 }

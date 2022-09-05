@@ -1,10 +1,10 @@
 import { Component } from "react";
 import "../../styles/profile.css"
-import Avater from "../images/david-justice.jpg"
+
 
 class Profile extends Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {}
     }
 
@@ -12,10 +12,10 @@ class Profile extends Component {
         return (
             <div className="profile-page">
                 <div className="profileinfo-div">
-                    <img id="profilepage-avatar" src={Avater}></img>
-                    <h1>David Justice</h1>
-                    <h2>@officialdavidjustice</h2>
-                    <p>NJ Realtor and Founder of Brokersphere</p>
+                    <img id="profilepage-avatar" src={this.props.photo} alt="avater"></img>
+                    <h1>{this.props.h1}</h1>
+                    <h2>@{this.props.h2}</h2>
+                    <p>{this.props.p}</p>
                     <button>FAVORITES</button>
                 </div>
                 

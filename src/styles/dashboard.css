@@ -49,10 +49,13 @@
         border: 1px solid black;
     }
 
-    #dashboard footer {
-        margin-top: 100px;
-        font-size: 10px;
-        text-align: center;
+    #dashbuttons-div button:nth-child(6) {
+        background-color: white;
+        color:blue;
+        border: none;
         font-weight: bold;
+        position: relative;
+        top:20vh;
+        box-shadow: none;
     }
 }

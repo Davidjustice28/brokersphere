@@ -13,7 +13,7 @@ class LoggedInUserProfile extends Component {
         return (
             <div id="loggedin-userprofile">
                 <Header leftIcon="arrow_back" pageName="Profile" rightIcon="edit" backFunc = {this.props.backFunc}/>
-                <Profile/>
+                <Profile photo ={this.props.user.Photo} h1 = {this.props.user.Name} h2={this.props.user.Username} p = {this.props.user.Bio}/>
             </div>
         )
     }

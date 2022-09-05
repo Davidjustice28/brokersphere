@@ -15,13 +15,13 @@ class LoginPage extends Component {
                 <h1>Login</h1>
                 <form>
                     <label htmlFor="email-login">Email</label>
-                    <input id="Email-login" placeholder="Enter Email..."></input>
+                    <input id="email-login" placeholder="Enter Email..."></input>
                     <label htmlFor="password-login">Password</label>
                     <input id="password-login" placeholder="Enter Password..."></input>
                     <label>Reset Password</label>
                     <button type="button" onClick={this.props.func}>Login</button>
                 </form>
-                <p>JOIN BROKERSPHERE</p>
+                <p onClick={this.props.func2}>JOIN BROKERSPHERE</p>
             </div>
         )
     }
