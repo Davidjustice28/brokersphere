@@ -44,6 +44,6 @@
     border-radius: 10px;
 }
 
-#login-page input ::placeholder {
+#login-page  ::placeholder {
     color: white
 }
