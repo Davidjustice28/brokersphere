@@ -14,7 +14,7 @@ class ReferralPage extends Component {
         return (
             <div>
                 <Header leftIcon ="arrow_back" pageName="Referrals" backFunc ={this.props.backFunc}/>
-                <h1>{referralArray.length} Available Referrals</h1>
+                <h1 id="referralpage-h1">{referralArray.length} Available Referrals</h1>
                 <div id = "referral-list">
                 {referralArray.map((referral) => {
                     return (

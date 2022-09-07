@@ -1,7 +1,11 @@
-h1 {
+#referralpage-h1 {
     font-size: 20px;
     margin-left: 40px;
 
+}
+
+h1 {
+    font-size: 20px;
 }
 
 #referral-list {

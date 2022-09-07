@@ -1,21 +1,29 @@
-#about-screen {
+#agentsearch-page input{
+    border-radius: 10px;
+    width:80%;
+    font-size: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+
+}
+
+#agentsearch-page button {
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+}
+
+#agentsearch-page label {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#agentsearch-page form {
+    margin-top: 15px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-}
-
-
-#about-screen img {
-    width:100%;
-    height: auto;
-}
-
-#about-screen h1 {
-    text-align: center;
-}
-
-#about-screen p {
-    text-align: center;
-    width:85%;
-    font-size: 22px;
+    gap: 10px;
 }

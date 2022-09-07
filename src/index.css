@@ -16,4 +16,6 @@ body {
     transform: scale(1.1);
   }
 
-  
+  .material-symbols-outlined:hover {
+    cursor: default;
+  }

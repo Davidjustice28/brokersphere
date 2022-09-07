@@ -39,7 +39,11 @@
 }
 
 #login-page button {
-    background-color: lightblue;
+    background-color: #1f80f8;
     color: white;
     border-radius: 10px;
+}
+
+#login-page input ::placeholder {
+    color: white
 }

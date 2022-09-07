@@ -8,9 +8,11 @@ import LeadPage from "./components/pages/leads-page";
 import ReferralPage from "./components/pages/referrals-page";
 import ConversationPage from "./components/pages/conversations-page";
 import NewReferralForm from "./components/pages/new-referralform";
+import AgentResultsPage from "./components/pages/agentresults-page";
 import SignupPage from "./components/pages/signup-page";
 import Photo1 from "./components/images/david-justice.jpg";
 import Photo2 from "./components/images/IMG_1049.jpg";
+import Photo3 from "./components/images/IMG_3396.jpg"
 
 class App extends Component {
   constructor() {
@@ -23,8 +25,27 @@ class App extends Component {
           Email: "example@email.com",
           Password: "Jade2021!",
           Photo: Photo1,
-          Bio: "NJ Realtor and Founder of Brokersphere"
+          Bio: "NJ Realtor and Founder of Brokersphere",
+          State: "Delaware"
         },
+        {
+          Name: "Jade Justice",
+          Username: "darthsidious",
+          Email: "jade@email.com",
+          Password: "Ui6az4mp!!",
+          Photo: Photo2,
+          Bio: "I love cheese curls, mac & cheese, and pudding!",
+          State: "New Jersey"
+        },
+        {
+          Name: "Lina Justice",
+          Username: "wifey2019",
+          Email: "lina@email.com",
+          Password: "password123",
+          Photo: Photo3,
+          Bio: "Founder of Astitch, mother of 2, and ruler of the 9 realms",
+          State: "Washington"
+        }
       ],
       loggedIn:false,
       dashboard: true,
@@ -34,6 +55,7 @@ class App extends Component {
       leadpage:false,
       referralpage:false,
       conversationpage: false,
+      agentresultspage: false,
       newreferralpage: false,
       signuppage: false,
       referrals: [
@@ -65,12 +87,14 @@ class App extends Component {
     this.displayReferralPage = this.displayReferralPage.bind(this)
     this.displayConversationPage = this.displayConversationPage.bind(this)
     this.displayNewreferralPage = this.displayNewreferralPage.bind(this)
+    this.displayAgentResultsPage = this.displayAgentResultsPage.bind(this)
     this.signupOrLogin = this.signupOrLogin.bind(this)
     this.createReferral = this.createReferral.bind(this)
     this.createUser = this.createUser.bind(this)
     this.loginUser = this.loginUser.bind(this)
     this.logoutUser = this.logoutUser.bind(this)
     this.getUser = this.getUser.bind(this)
+    this.searchResults = this.searchResults.bind(this)
   }
 
   displayPage(page) {
@@ -95,7 +119,7 @@ class App extends Component {
 
   displayAgentSearchPage() {
     console.log("Agent search button is working")
-    this.setState({agentsearchpage: true, aboutpage: false, dashboard: false, userprofile:false})
+    this.setState({agentsearchpage: true, aboutpage: false, dashboard: false, userprofile:false, agentresultspage:false})
   }
 
   displayLeadPage() {
@@ -116,6 +140,11 @@ class App extends Component {
   displayNewreferralPage() {
     console.log("New referral page button is working")
     this.setState({newreferralpage: true, conversationpage:false, referralpage:false, leadpage: false, agentsearchpage: false, aboutpage: false, dashboard: false, userprofile:false})
+  }
+
+  displayAgentResultsPage() {
+    console.log("Agent results page button is working")
+    this.setState({agentresultspage: true, newreferralpage: false, conversationpage:false, referralpage:false, leadpage: false, agentsearchpage: false, aboutpage: false, dashboard: false, userprofile:false })
   }
 
   signupOrLogin() {
@@ -188,6 +217,14 @@ class App extends Component {
     });
   }
 
+  searchResults() {
+    this.displayAgentResultsPage()
+  }
+
+  componentDidUpdate() {
+    console.log(this.state.searchresults)
+  }
+
   render() {
       if(this.state.loggedIn === false ) {
         if(this.state.signuppage === false) {
@@ -206,7 +243,7 @@ class App extends Component {
         return <LoggedInUserProfile backFunc = {this.displayDashboard} user = {this.state.LoggedUser}/>
       }
       else if(this.state.agentsearchpage === true) {
-        return <AgentSearchPage backFunc = {this.displayDashboard}/>
+        return <AgentSearchPage searchFunc = {this.searchResults} backFunc = {this.displayDashboard}/>
       }
       else if(this.state.leadpage === true) {
         return <LeadPage backFunc = {this.displayDashboard}/>
@@ -219,6 +256,9 @@ class App extends Component {
       }
       else if(this.state.newreferralpage === true) {
         return <NewReferralForm backFunc = {this.displayReferralPage} createFunc = {this.createReferral}/>
+      }
+      else if(this.state.agentresultspage === true) {
+        return <AgentResultsPage backFunc = {this.displayAgentSearchPage} users = {this.state.users}/>
       }
   }
   }
