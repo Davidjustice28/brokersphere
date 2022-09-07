@@ -33,6 +33,7 @@
     text-align: center;
     color: blue;
     top:50px;
+    cursor:default;
 }
 
 #signup-page label {
@@ -50,4 +51,8 @@
     border-radius: 10px;
     position: relative;
     top:25px;
+}
+
+#signup-page ::placeholder {
+    color:white;
 }

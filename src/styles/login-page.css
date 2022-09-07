@@ -27,6 +27,7 @@
     top: 30vh;
     text-align: center;
     color: blue;
+    cursor:default;
 }
 
 #login-page label {
