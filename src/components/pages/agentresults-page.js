@@ -5,7 +5,11 @@ import "../../styles/agentresults-page.css";
 class AgentResultsPage extends Component{
     constructor(props) {
         super(props)
-        this.state = {}
+        this.state = {
+            selectedUser: this.props.searcheduser
+        }
+
+    
     }
     render() {
         return (
@@ -22,6 +26,7 @@ class AgentResultsPage extends Component{
                                         {user.Bio}
                                     </p>
                                 </div>
+                                <span className="material-symbols-outlined" id ="profile-button" onClick={() => this.props.profileFunc(user)}>account_circle</span>
                             </div>
                         )
                     })}

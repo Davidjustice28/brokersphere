@@ -28,3 +28,8 @@
     border-radius: 25px;
     margin-left: 5%;
 }
+
+.result-div span {
+    position: absolute;
+    left: 90%;
+}

@@ -13,7 +13,7 @@ class DashboardHeader extends Component {
             <div id="dashboard-header">
                 <span></span>
                 <img src = {this.props.image} alt ="logo"></img>
-                <span className="material-symbols-outlined" onClick={this.props.func}>mail</span>
+                <span className="material-symbols-outlined" onClick={this.props.func}>feed</span>
             </div>
         )
     }

@@ -27,3 +27,15 @@
     flex-direction: column;
     gap: 10px;
 }
+
+#specialty-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-left:auto;
+    margin-right: auto;
+}
+
+ #specialty-selection select {
+    border:2px solid green;
+}

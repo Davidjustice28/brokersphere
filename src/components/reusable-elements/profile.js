@@ -16,7 +16,14 @@ class Profile extends Component {
                     <h1>{this.props.h1}</h1>
                     <h2>@{this.props.h2}</h2>
                     <p>{this.props.p}</p>
-                    <button>FAVORITES</button>
+                    <div className="my-tags">
+                        {this.props.tags.map((tag) => {
+                            return (
+                                <button>{tag}</button>
+                            )
+                        })}
+                    </div>
+                    <button id ="searcheduser-button">{this.props.button}</button>
                 </div>
                 
             </div>

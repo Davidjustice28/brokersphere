@@ -1,0 +1,22 @@
+.lead-div {
+    display:flex;
+    border: 1px solid silver;
+    width: 100%;
+    align-items: center;
+}
+
+.lead-div span {
+    color:silver;
+    position: absolute;
+    left: 90%;
+}
+.lead-div p {
+    position: relative;
+    left: 5%;
+}
+
+#lead-details {
+    border: 2px solid green;
+    margin-left: 5%;
+    margin-right: 5%;
+}

@@ -59,6 +59,11 @@ h1 {
     left:85%;
     background-color: blue;
 }
+
+#referral-addbutton span {
+    color:white;
+}
+
 #referral-addbutton:active {
     transform: scale(1.1);
 }

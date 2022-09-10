@@ -9,6 +9,7 @@ import ReferralPage from "./components/pages/referrals-page";
 import ConversationPage from "./components/pages/conversations-page";
 import NewReferralForm from "./components/pages/new-referralform";
 import AgentResultsPage from "./components/pages/agentresults-page";
+import SearchedUserProfile from "./components/pages/searcheduser-profile";
 import SignupPage from "./components/pages/signup-page";
 import Photo1 from "./components/images/david-justice.jpg";
 import Photo2 from "./components/images/IMG_1049.jpg";
@@ -26,7 +27,9 @@ class App extends Component {
           Password: "Jade2021!",
           Photo: Photo1,
           Bio: "NJ Realtor and Founder of Brokersphere",
-          State: "Delaware"
+          State: "Delaware",
+          Tags: ["Buyers",  "Condos", "Sellers"],
+          Leads: []
         },
         {
           Name: "Jade Justice",
@@ -34,8 +37,10 @@ class App extends Component {
           Email: "jade@email.com",
           Password: "Ui6az4mp!!",
           Photo: Photo2,
-          Bio: "I love cheese curls, mac & cheese, and pudding!",
-          State: "New Jersey"
+          Bio: "I love cheese curls and mac & cheese!",
+          State: "New Jersey",
+          Tags: ["Commercial", "Land", "Sellers"],
+          Leads: []
         },
         {
           Name: "Lina Justice",
@@ -43,8 +48,10 @@ class App extends Component {
           Email: "lina@email.com",
           Password: "password123",
           Photo: Photo3,
-          Bio: "Founder of Astitch, mother of 2, and ruler of the 9 realms",
-          State: "Washington"
+          Bio: "Founder of Astitch and ruler of the 9 realms",
+          State: "Washington",
+          Tags: ["Luxury", "Renters", "Buyers"],
+          Leads: []
         }
       ],
       loggedIn:false,
@@ -57,6 +64,8 @@ class App extends Component {
       conversationpage: false,
       agentresultspage: false,
       newreferralpage: false,
+      searcheduserprofile: false,
+      searcheduser:null,
       signuppage: false,
       referrals: [
         {
@@ -64,16 +73,28 @@ class App extends Component {
           Type: "Buyer",
           Location: "Cherry Hill",
           Financing: "FHA",
-          Budget: 250000,
+          Budget: "250,000",
+          Name: "Alisha Foster",
+          Email: "lyricskyy@gmail.com",
+          Number: "123-456-7890",
+          Notes: "Is looking for a townhouse with easy access to route 70",
+          Fee: 25
         },
         {
           Agent: "Ryan Serhant",
           Type: "Buyer",
           Location: "New York",
           Financing: "VA",
-          Budget: 500000
+          Budget: "500,000",
+          Name: "Johnny Depp",
+          Email: "captainsparrow@email.com",
+          Number: "098-765-4321",
+          Notes: "Wants the nicest high-rise condo in Chelsea",
+          Fee: 30
         },
       ],
+    
+
 
   
     }
@@ -95,6 +116,12 @@ class App extends Component {
     this.logoutUser = this.logoutUser.bind(this)
     this.getUser = this.getUser.bind(this)
     this.searchResults = this.searchResults.bind(this)
+    this.displaySearchedUserProfile = this.displaySearchedUserProfile.bind(this)
+    this.setSearchedUser = this.setSearchedUser.bind(this)
+    this.addLead = this.addLead.bind(this)
+    this.deleteReferral = this.deleteReferral.bind(this)
+  
+    
   }
 
   displayPage(page) {
@@ -109,12 +136,12 @@ class App extends Component {
 
   displayDashboard() {
     console.log("Back button is working")
-    this.setState({aboutpage:false, userprofile:false, dashboard:true})
+    this.setState({conversationpage: false, referralpage: false, leadpage: false, agentsearchpage: false, aboutpage:false, userprofile:false, dashboard:true, searcheduserprofile:false})
   }
 
   displayMyProfile() {
     console.log("Profile button is working")
-    this.setState({aboutpage:false, dashboard: false, userprofile: true})
+    this.setState({favoritespage: false, aboutpage:false, dashboard: false, userprofile: true})
   }
 
   displayAgentSearchPage() {
@@ -134,7 +161,19 @@ class App extends Component {
 
   displayConversationPage() {
     console.log("Conversation page button is working")
-    this.setState({conversationpage:true, referralpage:false, leadpage: false, agentsearchpage: false, aboutpage: false, dashboard: false, userprofile:false})
+    fetch("https://newsapi.org/v2/top-headlines?q=housing&apiKey=fbda19bc8e5a4bf98beb21716c2a2065")
+    .then((data) => {
+      return data.json()
+    }).then((articleObject) => {
+      this.setState({articles:articleObject.articles})
+      setTimeout(() => {
+        console.log(this.state.articles)
+      },500)
+    }).then(() => {
+      this.setState({conversationpage:true, referralpage:false, leadpage: false, agentsearchpage: false, aboutpage: false, dashboard: false, userprofile:false})
+    }).catch(() => {
+      console.log("error didn't fetch properly")
+    })
   }
   
   displayNewreferralPage() {
@@ -146,6 +185,13 @@ class App extends Component {
     console.log("Agent results page button is working")
     this.setState({agentresultspage: true, newreferralpage: false, conversationpage:false, referralpage:false, leadpage: false, agentsearchpage: false, aboutpage: false, dashboard: false, userprofile:false })
   }
+
+  displaySearchedUserProfile() {
+    console.log("Search user profile button is working")
+    this.setState({agentresultspage: false, searcheduserprofile: true})
+  }
+
+
 
   signupOrLogin() {
     if(this.state.signuppage === true) {
@@ -221,9 +267,49 @@ class App extends Component {
     this.displayAgentResultsPage()
   }
 
-  componentDidUpdate() {
-    console.log(this.state.searchresults)
+  setSearchedUser(agent) {
+    this.setState({searcheduser: agent})
+    setTimeout(() => {
+      console.log(this.state.searcheduser)
+      this.displaySearchedUserProfile()
+    }, 500)
+    
   }
+
+
+  deleteReferral(referral) {
+    this.setState({referrals: this.state.referrals.filter(function(value, index, arr) {
+      return !(value === referral)
+    })})
+    setTimeout(() => {
+      console.log(this.state.referrals)
+    }, 1000);
+  }
+
+  addLead(referral) {
+    this.setState({
+      LoggedUser: {
+        Name: this.state.LoggedUser.Name,
+        Username: this.state.LoggedUser.Username,
+        Email: this.state.LoggedUser.Email,
+        Password: this.state.LoggedUser.Password,
+        Photo: this.state.LoggedUser.Photo,
+        Bio: this.state.LoggedUser.Bio,
+        State: this.state.LoggedUser.State,
+        Tags: this.state.LoggedUser.Tags,
+        Leads: this.state.LoggedUser.Leads.concat(referral)
+      }  
+     })
+    console.log("Accepted referral lead")
+    setTimeout(() => {
+      console.log(this.state.LoggedUser.Leads)
+      setTimeout(() => {
+        this.deleteReferral(referral)
+      }, 250);
+    }, 500);
+  }
+
+
 
   render() {
       if(this.state.loggedIn === false ) {
@@ -240,25 +326,28 @@ class App extends Component {
         return <AboutScreen backFunc = {this.displayDashboard}/>
       }
       else if(this.state.userprofile === true) {
-        return <LoggedInUserProfile backFunc = {this.displayDashboard} user = {this.state.LoggedUser}/>
+        return <LoggedInUserProfile backFunc = {this.displayDashboard} user = {this.state.LoggedUser} favFunc = {this.displayFavoritesPage}/>
       }
       else if(this.state.agentsearchpage === true) {
         return <AgentSearchPage searchFunc = {this.searchResults} backFunc = {this.displayDashboard}/>
       }
       else if(this.state.leadpage === true) {
-        return <LeadPage backFunc = {this.displayDashboard}/>
+        return <LeadPage backFunc = {this.displayDashboard} leads = {this.state.LoggedUser.Leads}/>
       }
       else if(this.state.referralpage === true) {
-        return <ReferralPage backFunc = {this.displayDashboard} referrals = {this.state.referrals} addFunc = {this.displayNewreferralPage}/>
+        return <ReferralPage backFunc = {this.displayDashboard} referrals = {this.state.referrals} addFunc = {this.displayNewreferralPage} leadFunc = {this.addLead}/>
       }
       else if(this.state.conversationpage === true) {
-        return <ConversationPage backFunc = {this.displayDashboard}/>
+        return <ConversationPage articles = {this.state.articles} backFunc = {this.displayDashboard}/>
       }
       else if(this.state.newreferralpage === true) {
         return <NewReferralForm backFunc = {this.displayReferralPage} createFunc = {this.createReferral}/>
       }
       else if(this.state.agentresultspage === true) {
-        return <AgentResultsPage backFunc = {this.displayAgentSearchPage} users = {this.state.users}/>
+        return <AgentResultsPage backFunc = {this.displayAgentSearchPage} users = {this.state.users} profileFunc = {this.setSearchedUser} />
+      }
+      else if(this.state.searcheduserprofile === true) {
+        return <SearchedUserProfile backFunc = {this.displayAgentResultsPage} user = {this.state.searcheduser}/>
       }
   }
   }

@@ -51,3 +51,20 @@
     box-shadow: 0px 2px 2px gray;
 
 }
+
+.my-tags {
+    display: flex;
+    width:80%;
+    align-items: center;
+    justify-content: center;
+    gap:5%;
+    margin-bottom: 25px;
+}
+
+.my-tags button {
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid gray;
+    background-color: white;
+    color: black;
+}

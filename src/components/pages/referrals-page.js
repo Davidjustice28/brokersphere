@@ -18,7 +18,7 @@ class ReferralPage extends Component {
                 <div id = "referral-list">
                 {referralArray.map((referral) => {
                     return (
-                        <div className="referral">
+                        <div className="referral" onClick={() => this.props.leadFunc(referral)}>
                             <div>
                                 <p>Agent: {referral.Agent}</p>
                                 <p>Type: {referral.Type}</p>
