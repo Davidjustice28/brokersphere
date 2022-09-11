@@ -15,7 +15,7 @@ class Dashboard extends Component {
     render() {
         return (
             <div id="dashboard">
-                <DashboardHeader image = {photo} func ={this.props.conversationFunc}/>
+                <DashboardHeader image = {photo} func ={this.props.conversationFunc} feedFunc = {this.props.feedFunc}/>
                 <div id="dash-title" >
                     <h1>Dashboard</h1>
                 </div>

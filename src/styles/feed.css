@@ -1,0 +1,56 @@
+#channels-div {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.channel {
+    border:2px solid black;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.channel button {
+    font-size: smaller;
+}
+
+#channel-feed {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#new-comment {
+    margin-top: 10px;
+    display: flex;
+    width: 90%;
+    justify-content: center;
+    gap:10px;
+    margin-bottom: 20px;
+}
+
+#new-comment input {
+    border: 2px solid black;
+}
+
+.comment-div {
+    border: 2px solid gray;
+    display: flex;
+    width: 90%;
+    border-radius: 20px;
+    justify-content: space-evenly;
+}
+
+.comment-div p:nth-child(1) {
+    width:50%;
+    font-weight: bold;
+}
+
+.comment-div p:nth-child(2) {
+    width: 40%;
+    text-align: center;
+}

@@ -10,6 +10,7 @@ import ConversationPage from "./components/pages/conversations-page";
 import NewReferralForm from "./components/pages/new-referralform";
 import AgentResultsPage from "./components/pages/agentresults-page";
 import SearchedUserProfile from "./components/pages/searcheduser-profile";
+import Feed from "./components/pages/feed";
 import SignupPage from "./components/pages/signup-page";
 import Photo1 from "./components/images/david-justice.jpg";
 import Photo2 from "./components/images/IMG_1049.jpg";
@@ -67,6 +68,7 @@ class App extends Component {
       searcheduserprofile: false,
       searcheduser:null,
       signuppage: false,
+      feedpage:false,
       referrals: [
         {
           Agent: "David Justice",
@@ -109,6 +111,7 @@ class App extends Component {
     this.displayConversationPage = this.displayConversationPage.bind(this)
     this.displayNewreferralPage = this.displayNewreferralPage.bind(this)
     this.displayAgentResultsPage = this.displayAgentResultsPage.bind(this)
+    this.displayFeedPage = this.displayFeedPage.bind(this)
     this.signupOrLogin = this.signupOrLogin.bind(this)
     this.createReferral = this.createReferral.bind(this)
     this.createUser = this.createUser.bind(this)
@@ -189,6 +192,10 @@ class App extends Component {
   displaySearchedUserProfile() {
     console.log("Search user profile button is working")
     this.setState({agentresultspage: false, searcheduserprofile: true})
+  }
+
+  displayFeedPage() {
+    this.setState({feedpage: true,dashboard: false})
   }
 
 
@@ -314,13 +321,13 @@ class App extends Component {
   render() {
       if(this.state.loggedIn === false ) {
         if(this.state.signuppage === false) {
-        return <LoginPage func = {this.getUser} array = {this.state.users} func2 ={this.signupOrLogin} />
+          return <LoginPage func = {this.getUser} array = {this.state.users} func2 ={this.signupOrLogin} />
         }else{
           return <SignupPage func1 ={this.createUser} func2 = {this.signupOrLogin} />
         }
       }else {
       if(this.state.dashboard  === true) {
-        return <Dashboard aboutFunc = {this.displayAboutPage} profileFunc ={this.displayMyProfile} searchFunc = {this.displayAgentSearchPage} leadFunc = {this.displayLeadPage} referralFunc ={this.displayReferralPage} conversationFunc = {this.displayConversationPage} logout = {this.logoutUser}/>
+        return <Dashboard feedFunc = {this.displayFeedPage}aboutFunc = {this.displayAboutPage} profileFunc ={this.displayMyProfile} searchFunc = {this.displayAgentSearchPage} leadFunc = {this.displayLeadPage} referralFunc ={this.displayReferralPage} conversationFunc = {this.displayConversationPage} logout = {this.logoutUser}/>
       }
       else if(this.state.aboutpage === true) {
         return <AboutScreen backFunc = {this.displayDashboard}/>
@@ -348,6 +355,9 @@ class App extends Component {
       }
       else if(this.state.searcheduserprofile === true) {
         return <SearchedUserProfile backFunc = {this.displayAgentResultsPage} user = {this.state.searcheduser}/>
+      }
+      else if (this.state.feedpage === true) {
+        return <Feed backFunc = {this.displayDashboard} user = {this.state.LoggedUser}/>
       }
   }
   }
