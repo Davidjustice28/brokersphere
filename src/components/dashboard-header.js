@@ -12,7 +12,7 @@ class DashboardHeader extends Component {
         return (
             <div id="dashboard-header">
                 <span></span>
-                <img src = {this.props.image} alt ="logo" onClick={this.props.feedFunc}></img>
+                <img src = {this.props.image} alt ="logo" onClick={this.props.func2}></img>
                 <span className="material-symbols-outlined" onClick={this.props.func}>feed</span>
             </div>
         )

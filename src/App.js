@@ -6,15 +6,17 @@ import LoggedInUserProfile from "./components/pages/user-profile";
 import AgentSearchPage from "./components/pages/search-page";
 import LeadPage from "./components/pages/leads-page";
 import ReferralPage from "./components/pages/referrals-page";
-import ConversationPage from "./components/pages/conversations-page";
 import NewReferralForm from "./components/pages/new-referralform";
 import AgentResultsPage from "./components/pages/agentresults-page";
 import SearchedUserProfile from "./components/pages/searcheduser-profile";
 import Feed from "./components/pages/feed";
+import ListingsPage from "./components/pages/listings-page";
 import SignupPage from "./components/pages/signup-page";
 import Photo1 from "./components/images/david-justice.jpg";
 import Photo2 from "./components/images/IMG_1049.jpg";
 import Photo3 from "./components/images/IMG_3396.jpg"
+import LittlemillPhoto from "../src/components/images/852littlemill.JPG";
+import HiddenPhoto from "../src/components/images/121hidden.jpg";
 
 class App extends Component {
   constructor() {
@@ -62,13 +64,13 @@ class App extends Component {
       agentsearchpage: false,
       leadpage:false,
       referralpage:false,
-      conversationpage: false,
       agentresultspage: false,
       newreferralpage: false,
       searcheduserprofile: false,
       searcheduser:null,
       signuppage: false,
       feedpage:false,
+      listingspage: false,
       referrals: [
         {
           Agent: "David Justice",
@@ -95,6 +97,35 @@ class App extends Component {
           Fee: 30
         },
       ],
+      index: 0,
+      listings: [
+        {
+          img: LittlemillPhoto,
+          address: "852 Little Mill Rd, Monroeville, NJ 08313",
+          price: "235,000",
+          bedrooms: 3,
+          bathrooms: 2,
+          squarefeet: "1,372",
+          taxes: "1,200",
+          condition: "Great",
+          likes: 3,
+          dislikes: 7,
+          agent: "David Justice"
+        },
+        {
+          img: HiddenPhoto,
+          address: "121 Hidden Dr, Blackwood, NJ 08012",
+          price: "255,000",
+          bedrooms: 4,
+          bathrooms: 2.5,
+          squarefeet: "2002",
+          taxes: "8,000",
+          condition: "Good",
+          likes: 10,
+          dislikes: 2,
+          agent: "David Justice"
+        }
+      ]
     
 
 
@@ -108,10 +139,10 @@ class App extends Component {
     this.displayAgentSearchPage = this.displayAgentSearchPage.bind(this)
     this.displayLeadPage = this.displayLeadPage.bind(this)
     this.displayReferralPage = this.displayReferralPage.bind(this)
-    this.displayConversationPage = this.displayConversationPage.bind(this)
     this.displayNewreferralPage = this.displayNewreferralPage.bind(this)
     this.displayAgentResultsPage = this.displayAgentResultsPage.bind(this)
     this.displayFeedPage = this.displayFeedPage.bind(this)
+    this.displayListingsPage = this.displayListingsPage.bind(this)
     this.signupOrLogin = this.signupOrLogin.bind(this)
     this.createReferral = this.createReferral.bind(this)
     this.createUser = this.createUser.bind(this)
@@ -123,6 +154,11 @@ class App extends Component {
     this.setSearchedUser = this.setSearchedUser.bind(this)
     this.addLead = this.addLead.bind(this)
     this.deleteReferral = this.deleteReferral.bind(this)
+    this.addListing = this.addListing.bind(this)
+    this.changeListing = this.changeListing.bind(this)
+    this.backListing = this.backListing.bind(this)
+    this.likeordislike = this.likeordislike.bind(this)
+
   
     
   }
@@ -139,7 +175,7 @@ class App extends Component {
 
   displayDashboard() {
     console.log("Back button is working")
-    this.setState({conversationpage: false, referralpage: false, leadpage: false, agentsearchpage: false, aboutpage:false, userprofile:false, dashboard:true, searcheduserprofile:false})
+    this.setState({listingspage: false, feedpage:false, conversationpage: false, referralpage: false, leadpage: false, agentsearchpage: false, aboutpage:false, userprofile:false, dashboard:true, searcheduserprofile:false})
   }
 
   displayMyProfile() {
@@ -161,23 +197,6 @@ class App extends Component {
     console.log("Referral page button is working")
     this.setState({referralpage:true, leadpage: false, agentsearchpage: false, aboutpage: false, dashboard: false, userprofile:false})
   }
-
-  displayConversationPage() {
-    console.log("Conversation page button is working")
-    fetch("https://newsapi.org/v2/top-headlines?q=housing&apiKey=fbda19bc8e5a4bf98beb21716c2a2065")
-    .then((data) => {
-      return data.json()
-    }).then((articleObject) => {
-      this.setState({articles:articleObject.articles})
-      setTimeout(() => {
-        console.log(this.state.articles)
-      },500)
-    }).then(() => {
-      this.setState({conversationpage:true, referralpage:false, leadpage: false, agentsearchpage: false, aboutpage: false, dashboard: false, userprofile:false})
-    }).catch(() => {
-      console.log("error didn't fetch properly")
-    })
-  }
   
   displayNewreferralPage() {
     console.log("New referral page button is working")
@@ -196,6 +215,10 @@ class App extends Component {
 
   displayFeedPage() {
     this.setState({feedpage: true,dashboard: false})
+  }
+
+  displayListingsPage() {
+    this.setState({listingspage: true, dashboard: false})
   }
 
 
@@ -297,9 +320,9 @@ class App extends Component {
     this.setState({
       LoggedUser: {
         Name: this.state.LoggedUser.Name,
-        Username: this.state.LoggedUser.Username,
         Email: this.state.LoggedUser.Email,
-        Password: this.state.LoggedUser.Password,
+        Password: this.state.LoggedUser.Password,        
+        Username: this.state.LoggedUser.Username,
         Photo: this.state.LoggedUser.Photo,
         Bio: this.state.LoggedUser.Bio,
         State: this.state.LoggedUser.State,
@@ -316,6 +339,57 @@ class App extends Component {
     }, 500);
   }
 
+  addListing(i,a,p,bd,bth,s,t,c) {
+    this.setState({listings: this.state.listings.concat({
+      img: i,
+      address: a,
+      price: p,
+      bedrooms: bd,
+      bathrooms: bth,
+      squarefeet: s,
+      taxes: t,
+      condition: c,
+      likes: 0,
+      dislikes: 0,
+      agent: this.state.LoggedUser.Name
+    })})
+  }
+
+  changeListing() {
+    if(this.state.index < this.state.listings.length -1 || this.state.index === 0) {
+        this.setState({index: this.state.index + 1 })
+        setTimeout(() => {
+          console.log(this.state.index)
+        }, 250);
+    }else {
+      console.log("No more listings to display")
+      return
+    }
+  }
+
+  backListing(n) {
+    if(this.state.index > 0) {
+      this.setState({index: this.state.index - 1 })
+      setTimeout(() => {
+        console.log(this.state.index)
+      }, 250);
+    }else {
+      console.log("No previous listings to show")
+      return
+    }
+  }
+
+  likeordislike(index, choice) {
+    const listings = [...this.state.listings]
+    if(choice === "like") {
+      listings[index].likes = listings[index].likes + 1
+      this.setState({listings,})
+    }else {
+      listings[index].dislikes = listings[index].dislikes + 1
+      this.setState({listings,})
+    } 
+  }
+  
 
 
   render() {
@@ -327,7 +401,7 @@ class App extends Component {
         }
       }else {
       if(this.state.dashboard  === true) {
-        return <Dashboard feedFunc = {this.displayFeedPage}aboutFunc = {this.displayAboutPage} profileFunc ={this.displayMyProfile} searchFunc = {this.displayAgentSearchPage} leadFunc = {this.displayLeadPage} referralFunc ={this.displayReferralPage} conversationFunc = {this.displayConversationPage} logout = {this.logoutUser}/>
+        return <Dashboard listingsFunc = {this.displayListingsPage} aboutFunc = {this.displayAboutPage} profileFunc ={this.displayMyProfile} searchFunc = {this.displayAgentSearchPage} leadFunc = {this.displayLeadPage} referralFunc ={this.displayReferralPage} feedFunc = {this.displayFeedPage} logout = {this.logoutUser}/>
       }
       else if(this.state.aboutpage === true) {
         return <AboutScreen backFunc = {this.displayDashboard}/>
@@ -344,9 +418,6 @@ class App extends Component {
       else if(this.state.referralpage === true) {
         return <ReferralPage backFunc = {this.displayDashboard} referrals = {this.state.referrals} addFunc = {this.displayNewreferralPage} leadFunc = {this.addLead}/>
       }
-      else if(this.state.conversationpage === true) {
-        return <ConversationPage articles = {this.state.articles} backFunc = {this.displayDashboard}/>
-      }
       else if(this.state.newreferralpage === true) {
         return <NewReferralForm backFunc = {this.displayReferralPage} createFunc = {this.createReferral}/>
       }
@@ -356,8 +427,11 @@ class App extends Component {
       else if(this.state.searcheduserprofile === true) {
         return <SearchedUserProfile backFunc = {this.displayAgentResultsPage} user = {this.state.searcheduser}/>
       }
-      else if (this.state.feedpage === true) {
-        return <Feed backFunc = {this.displayDashboard} user = {this.state.LoggedUser}/>
+      else if(this.state.feedpage === true) {
+        return <Feed backFunc = {this.displayDashboard} />
+      }
+      else if(this.state.listingspage === true) {
+        return <ListingsPage backFunc = {this.displayDashboard} listings = {this.state.listings} index = {this.state.index} reverse = {this.backListing} forward = {this.changeListing} likefunc = {this.likeordislike}/>
       }
   }
   }

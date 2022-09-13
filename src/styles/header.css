@@ -1,5 +1,7 @@
-@media (max-width:500px){
+
     .header {
+        position:sticky;
+        top:-1px;
         display:flex;
         justify-content: space-evenly;
         gap:20%;
@@ -38,4 +40,3 @@
         position: relative;
     }
 
-}

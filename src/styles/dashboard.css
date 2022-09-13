@@ -1,4 +1,4 @@
-@media(max-width: 500px) {
+
     #dashboard {
         display: flex;
         flex-direction: column;
@@ -58,4 +58,4 @@
         top:20vh;
         box-shadow: none;
     }
-}
+

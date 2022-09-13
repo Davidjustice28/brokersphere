@@ -1,0 +1,71 @@
+#listings-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#listing-display {
+    width: 75%;
+    border: 2px solid black;
+    margin-top: 25px;
+    
+}
+
+#listing-display img {
+    width:100%;
+    height:50vw;
+    object-fit: cover;
+}
+
+#listing-div1 {
+    display: flex;
+    border-top: 1px solid black;
+    justify-content: center;
+    gap:25px;
+}
+
+#listing-buttons {
+    position: relative;
+    bottom: 200px;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+}
+
+#listing-buttons span {
+    transform: scale(1.5);
+}
+
+#listing-buttons span:active {
+    transform: scale(1.1);
+}
+
+#listing-display h1 {
+    width: 100%;
+    text-align: center;
+}
+
+#listing-display h1 {
+    font-size: smaller;
+}
+
+#listings-div2 {
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly
+}
+
+#listings-div2 span:active {
+    color:red;
+}
+
+#like-div, #dislike-div {
+    display: flex;
+    align-items: center;
+    gap:15px;
+}
+
+
