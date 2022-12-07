@@ -13,7 +13,7 @@ class Header extends Component {
             <div className="header">
                 <span className="material-symbols-outlined" onClick={this.props.backFunc}>{this.props.leftIcon}</span>
                 <h1>{this.props.pageName}</h1>
-                <span className="material-symbols-outlined">{this.props.rightIcon}</span>
+                <span className="material-symbols-outlined" onClick={this.props.rightFunc}>{this.props.rightIcon}</span>
 
             </div>
         )

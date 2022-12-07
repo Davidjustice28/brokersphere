@@ -1,4 +1,8 @@
 import { Component } from "react";
+import { db } from "./firebase-config";
+import  {collection, getDocs, addDoc} from "firebase/firestore";
+import { storage } from "./firebase-config";
+import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 import LoginPage from "./components/pages/login-page";
 import Dashboard from "./components/dashboard";
 import AboutScreen from "./components/about-screen";
@@ -22,6 +26,11 @@ class App extends Component {
   constructor() {
     super()
     this.state = {
+      usersdata:null,
+      usersRef: collection(db, "users"),
+      imageUpload: null,
+      imageList: [],
+      imageListRef:  ref(storage, "images/"),
       users: [
         {
           Name: "David Justice",
@@ -110,7 +119,21 @@ class App extends Component {
           condition: "Great",
           likes: 3,
           dislikes: 7,
-          agent: "David Justice"
+          agent: "David Justice",
+          comments: [
+            {
+              sender: "@Johnwick",
+              message: "The land this property sits on is amazing!"
+            },
+            {
+              sender: "@Michaelwilliams",
+              message: "I think the price is just right."
+            },
+            {
+              sender: "@realtorjenny",
+              message:"My client saw this home last Saturday. Nice area."
+            }
+          ],
         },
         {
           img: HiddenPhoto,
@@ -123,9 +146,21 @@ class App extends Component {
           condition: "Good",
           likes: 10,
           dislikes: 2,
-          agent: "David Justice"
+          agent: "David Justice",
+          comments: [
+            {
+              sender: "@chrisj23",
+              message: "Wish there was a better photo",
+            },
+            {
+              sender: "@kevinsellsnj",
+              message: "Taxes are alittle high, but you can't beat the location"
+            }
+          ],
         }
-      ]
+      ],
+      files: null,
+      searchresults: []
     
 
 
@@ -158,6 +193,10 @@ class App extends Component {
     this.changeListing = this.changeListing.bind(this)
     this.backListing = this.backListing.bind(this)
     this.likeordislike = this.likeordislike.bind(this)
+    this.newComment = this.newComment.bind(this)
+    this.changeImage = this.changeImage.bind(this)
+    this.uploadImage = this.uploadImage.bind(this)
+    this.getUsersData = this.getUsersData.bind(this)
 
   
     
@@ -175,7 +214,7 @@ class App extends Component {
 
   displayDashboard() {
     console.log("Back button is working")
-    this.setState({listingspage: false, feedpage:false, conversationpage: false, referralpage: false, leadpage: false, agentsearchpage: false, aboutpage:false, userprofile:false, dashboard:true, searcheduserprofile:false})
+    this.setState({newreferralpage:false,listingspage: false, feedpage:false, conversationpage: false, referralpage: false, leadpage: false, agentsearchpage: false, aboutpage:false, userprofile:false, dashboard:true, searcheduserprofile:false})
   }
 
   displayMyProfile() {
@@ -186,6 +225,7 @@ class App extends Component {
   displayAgentSearchPage() {
     console.log("Agent search button is working")
     this.setState({agentsearchpage: true, aboutpage: false, dashboard: false, userprofile:false, agentresultspage:false})
+    this.setState({searchresults: []})
   }
 
   displayLeadPage() {
@@ -234,13 +274,19 @@ class App extends Component {
 
 
   createReferral() {
-    if(!(document.getElementById("agent-input").innerText == null)) {
+    if(!(document.getElementById("name-input").innerText == null)) {
       this.setState({referrals: this.state.referrals.concat({
-        Agent: document.getElementById("agent-input").value,
+        Agent: this.state.LoggedUser.Name,
         Type: document.getElementById("type-input").value,
         Location: document.getElementById("location-input").value,
         Financing: document.getElementById("financing-input").value,
-        Budget: document.getElementById("budget-input").value
+        Budget: document.getElementById("budget-input").value,
+        Email: document.getElementById("email-input").value,
+        Number: document.getElementById("number-input").value,
+        Fee: document.getElementById("fee-input").value,
+        Name: document.getElementById("name-input").value,
+        Notes: document.getElementById("notes-input").value
+
       }) })
       this.displayReferralPage()
     }else {
@@ -248,30 +294,75 @@ class App extends Component {
    }
   }
 
+  
+
+    
+    
+    uploadImage = () => {
+        if(this.state.imageUpload == null) return
+        const imageRef = ref(storage, `images/${this.state.imageUpload.name}`)
+        uploadBytes(imageRef, this.state.imageUpload).then((response) => {
+           alert("photo is uploaded")
+        })
+
+    }
+
+
+    changeImage = (event) => {
+      this.setState({imageUpload: event.target.files[0]})
+    }
+
+
   createUser() {
+    listAll(this.state.imageListRef).then((response) => {
+      response.items.forEach((item) => {
+          getDownloadURL(item).then((url) => {
+              this.setState({imageList: this.state.imageList.concat(url)})
+          })
+      })
+    }).then(() => {
+      console.log(this.state.imageList)
+    }).then(() => {
+
+    
+
+
     return new Promise((resolve, reject) => {
       if(!(document.getElementById("email-signup").innerText == null)) {
-        this.setState({users: this.state.users.concat({
-          Name: document.getElementById("fullname-signup").value,
-          Username: document.getElementById("username-signup").value,
-          Email: document.getElementById("email-signup").value,
-          Password: document.getElementById("password-signup").value,
-          Bio: document.getElementById("bio-signup").value,
-          Photo: Photo2
-        }) })
-        resolve(this.state.users)
+        setTimeout(() => {
+          this.setState({users: this.state.users.concat({
+            Name: document.getElementById("fullname-signup").value,
+            Username: document.getElementById("username-signup").value,
+            Email: document.getElementById("email-signup").value,
+            Password: document.getElementById("password-signup").value,
+            Bio: document.getElementById("bio-signup").value,
+            Photo: this.state.imageList[0],
+            Tags: [document.getElementById("tags-input").value],
+            State: document.getElementById("state-signup").value,
+            Leads: []
+          }) })
+          resolve(this.state.users)  
+        }, 1000);
+        
       
       }else {
         return
      }
     }).then((array) => {
       setTimeout(() => {
-        this.setState({LoggedUser:this.state.users[this.state.users.length -1]}) 
+        new Promise((resolve, reject) => {
+          this.setState({LoggedUser:this.state.users[this.state.users.length -1]})
+        }).then(() => {
+          addDoc(collection(db, "users"), this.state.LoggedUser);
+        })
       }, 1000);
     }).then(() => {
-      console.log(this.state.LoggedUser)
-      this.loginUser()
+      setTimeout(() => {
+        this.loginUser()
+      },500)  
     })
+
+  })
   }
 
   
@@ -294,7 +385,15 @@ class App extends Component {
   }
 
   searchResults() {
+      this.state.usersdata.forEach((user) => {
+        if(user.State === document.getElementById("state-input").value) {
+          this.setState({searchresults: this.state.searchresults.concat(user)})
+          return
+        }
+      })
+    
     this.displayAgentResultsPage()
+  
   }
 
   setSearchedUser(agent) {
@@ -389,15 +488,41 @@ class App extends Component {
       this.setState({listings,})
     } 
   }
+
+  newComment() {
+    console.log(document.getElementById("comment-input").value)
+    const array = this.state.listings
+    array[this.state.index].comments.push({
+      sender: this.state.LoggedUser.Username,
+      message: document.getElementById("comment-input").value
+    })
+    this.setState({listings: array})
+    document.getElementById("comment-input").value = " "
+    document.getElementById("new-commentdiv").style.display = "none"
+  }
+
+   getUsersData() {
+    getDocs(this.state.usersRef)
+      .then((snapshot) => {
+        let users = []
+        snapshot.docs.forEach((doc) => {
+          users.push({...doc.data(), id: doc.id})
+        })
+        console.log(users)
+        this.setState({usersdata: users})
+        setTimeout(() => {
+          console.log(this.state.usersdata)
+        },500)
+      })
+  }
   
-
-
   render() {
+    console.log(this.state.users)
       if(this.state.loggedIn === false ) {
         if(this.state.signuppage === false) {
           return <LoginPage func = {this.getUser} array = {this.state.users} func2 ={this.signupOrLogin} />
         }else{
-          return <SignupPage func1 ={this.createUser} func2 = {this.signupOrLogin} />
+          return <SignupPage func1 ={this.createUser} func2 = {this.signupOrLogin} change = {this.changeImage} upload = {this.uploadImage}/>
         }
       }else {
       if(this.state.dashboard  === true) {
@@ -410,7 +535,7 @@ class App extends Component {
         return <LoggedInUserProfile backFunc = {this.displayDashboard} user = {this.state.LoggedUser} favFunc = {this.displayFavoritesPage}/>
       }
       else if(this.state.agentsearchpage === true) {
-        return <AgentSearchPage searchFunc = {this.searchResults} backFunc = {this.displayDashboard}/>
+        return <AgentSearchPage searchFunc = {this.searchResults} backFunc = {this.displayDashboard} loadfunc = {this.getUsersData}/>
       }
       else if(this.state.leadpage === true) {
         return <LeadPage backFunc = {this.displayDashboard} leads = {this.state.LoggedUser.Leads}/>
@@ -422,7 +547,7 @@ class App extends Component {
         return <NewReferralForm backFunc = {this.displayReferralPage} createFunc = {this.createReferral}/>
       }
       else if(this.state.agentresultspage === true) {
-        return <AgentResultsPage backFunc = {this.displayAgentSearchPage} users = {this.state.users} profileFunc = {this.setSearchedUser} />
+        return <AgentResultsPage backFunc = {this.displayAgentSearchPage} users = {this.state.searchresults} profileFunc = {this.setSearchedUser} />
       }
       else if(this.state.searcheduserprofile === true) {
         return <SearchedUserProfile backFunc = {this.displayAgentResultsPage} user = {this.state.searcheduser}/>
@@ -431,7 +556,7 @@ class App extends Component {
         return <Feed backFunc = {this.displayDashboard} />
       }
       else if(this.state.listingspage === true) {
-        return <ListingsPage backFunc = {this.displayDashboard} listings = {this.state.listings} index = {this.state.index} reverse = {this.backListing} forward = {this.changeListing} likefunc = {this.likeordislike}/>
+        return <ListingsPage commentFunc = {this.newComment} backFunc = {this.displayDashboard} listings = {this.state.listings} index = {this.state.index} reverse = {this.backListing} forward = {this.changeListing} likefunc = {this.likeordislike}/>
       }
   }
   }

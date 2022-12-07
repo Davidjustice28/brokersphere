@@ -13,7 +13,7 @@
 }
 
 #signup-page h1 {
-    color: blue;
+    color: #0277bd;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
@@ -31,21 +31,21 @@
 #signup-page p {
     position: relative;
     text-align: center;
-    color: blue;
+    color: #0277bd;
     top:50px;
     cursor:default;
 }
 
 #signup-page label {
-    color: blue;
+    color: #0277bd;
 }
 
 #signup-page input {
-    background-color: blue;
+    background-color: #0277bd;
     color: white;
 }
 
-#signup-page button {
+#signup-page form button {
     background-color: lightblue;
     color: white;
     border-radius: 10px;
@@ -55,4 +55,19 @@
 
 #signup-page ::placeholder {
     color:white;
+}
+
+#photoupload-div {
+    width: 90%;
+    margin-bottom: 20px;
+}
+
+#photoupload-div input {
+    width: 75%;
+}
+#photoupload-div button {
+    background-color: blue;
+    border-radius: 0%;
+    border: 1px solid black;
+    width: 25%;
 }

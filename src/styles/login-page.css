@@ -26,21 +26,21 @@
     position: relative;
     top: 30vh;
     text-align: center;
-    color: blue;
+    color: #0277bd;
     cursor:default;
 }
 
 #login-page label {
-    color: blue;
+    color: #0277bd;
 }
 
 #login-page input {
-    background-color: blue;
+    background-color: #0277bd;
     color: white;
 }
 
 #login-page button {
-    background-color: #1f80f8;
+    background-color: #0277bd;
     color: white;
     border-radius: 10px;
 }
