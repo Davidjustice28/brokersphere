@@ -1,22 +1,14 @@
-import { Component } from "react";
 import React from "react";
 import "../styles/header.css"
 
-class DashboardHeader extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {}
-    }
-
-    render() {
-        return (
-            <div id="dashboard-header">
-                <span></span>
-                <img src = {this.props.image} alt ="logo" onClick={this.props.func2}></img>
-                <span className="material-symbols-outlined" onClick={this.props.func}>feed</span>
-            </div>
-        )
-    }
+function DashboardHeader(props) {
+    return (
+        <div id="dashboard-header">
+            <span></span>
+            <img src = {props.image} alt ="logo" onClick={props.func2}></img>
+            <span className="material-symbols-outlined" onClick={props.func}>feed</span>
+        </div>
+    )
 }
 
 export default DashboardHeader

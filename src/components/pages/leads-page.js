@@ -1,60 +1,49 @@
-import { Component } from "react";
+import React, {useState} from "react"
 import Header from "../header";
 import "../../styles/lead-page.css"
 
-class LeadPage extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            detailspage:false,
-            currentlead: null
-        }
-        this.showDetails = this.showDetails.bind(this)
-    }
-
-    showDetails(choice) {
-        if(this.state.detailspage === false) {
-            this.setState({currentlead:choice})
-            this.setState({detailspage: true})
+export default function LeadPage(props) {
+    const [detailspage, setDetailsPage] = useState(false)
+    const [currentlead, setCurrentLead] = useState(null)
+    function showDetails(choice) {
+        if(detailspage === false) {
+            setCurrentLead(choice)
+            setDetailsPage(true)
         }else {
-            this.setState({detailspage:false})
+            setDetailsPage(false)
         }
     }
 
-    render() {
-        if(this.state.detailspage === false) {
-            return (
-                <div>
-                    <Header leftIcon ="arrow_back" pageName="My Leads" backFunc ={this.props.backFunc}/>
-                    {this.props.leads.map((lead) => {
-                        return (
-                            <div className="lead-div">
-                                <p>{lead.Name}</p>
-                                <span className="material-symbols-outlined" onClick={() => this.showDetails(lead)}>assignment</span>
-                            </div>
-                        )
-                    })}
+    if(detailspage === false) {
+        return (
+            <div>
+                <Header leftIcon ="arrow_back" pageName="My Leads" backFunc ={props.backFunc}/>
+                {props.leads.map((lead) => {
+                    return (
+                        <div className="lead-div">
+                            <p>{lead.Name}</p>
+                            <span className="material-symbols-outlined" onClick={() => showDetails(lead)}>assignment</span>
+                        </div>
+                    )
+                })}
+            </div>
+        )
+    }else {
+        return (
+            <div>
+                <Header leftIcon ="arrow_back" pageName="My Leads" backFunc ={showDetails}/>
+                <div id="lead-details">
+                    <p>Lead Name: {currentlead.Name}</p>
+                    <p>Desired Location: {currentlead.Location}</p>
+                    <p>Budget: {currentlead.Budget}</p>
+                    <p>Financing: {currentlead.Financing}</p>
+                    <p>Lead Type: {currentlead.Type}</p>
+                    <p>Email: {currentlead.Email}</p>
+                    <p>Number: {currentlead.Number}</p>
+                    <p>Referral Fee: {currentlead.Fee}%</p>
+                    <p>Notes: {currentlead.Notes}</p>
                 </div>
-            )
-        }else {
-            return (
-                <div>
-                    <Header leftIcon ="arrow_back" pageName="My Leads" backFunc ={this.showDetails}/>
-                    <div id="lead-details">
-                        <p>Lead Name: {this.state.currentlead.Name}</p>
-                        <p>Desired Location: {this.state.currentlead.Location}</p>
-                        <p>Budget: {this.state.currentlead.Budget}</p>
-                        <p>Financing: {this.state.currentlead.Financing}</p>
-                        <p>Lead Type: {this.state.currentlead.Type}</p>
-                        <p>Email: {this.state.currentlead.Email}</p>
-                        <p>Number: {this.state.currentlead.Number}</p>
-                        <p>Referral Fee: {this.state.currentlead.Fee}%</p>
-                        <p>Notes: {this.state.currentlead.Notes}</p>
-                    </div>
-                </div>
-            )
-        }
+            </div>
+        )
     }
 }
-
-export default LeadPage
