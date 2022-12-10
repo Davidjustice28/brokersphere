@@ -15,7 +15,7 @@ export default function LoginPage(props) {
                 <label>Reset Password</label>
                 <button type="button" onClick={props.func}>Login</button>
             </form>
-            <p onClick={this.props.func2}>JOIN BROKERSPHERE</p>
+            <p onClick={props.func2}>JOIN BROKERSPHERE</p>
         </div>
     ) 
 }

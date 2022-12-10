@@ -4,7 +4,7 @@ const {MongoClient} = require('mongodb')
 const uri = process.env.MONGO_uri
 
 const client = new MongoClient(uri,{useNewUrlParser: true, useUnifiedTopology: true,})
-const connectToDB = async() => {
+const getDbUsers = async() => {
     try {
         await client.connect()
         console.log('connected to database')
@@ -24,4 +24,30 @@ async function getUsers() {
     return users
 }
 
-module.exports.connect = connectToDB
+
+async function insertUser(name,username,email,password,photo,bio,state,tagsArray,leadsArray) {
+    try {
+      const db = await client.db('test_data').collection('users')
+      // create a document to insert
+      const doc = {
+        Name: name,
+        Username: username,
+        Email: email,
+        Password: password,
+        Photo: photo,
+        Bio: bio,
+        State: state,
+        Tags: tagsArray,
+        Leads: leadsArray
+    }
+      const result = await db.insertOne(doc);
+      return `A document was inserted with the _id: ${result.insertedId}`;
+    } catch(err) {
+        console.log(err)
+    } finally {
+      await client.close();
+    }
+  }
+
+module.exports.getDbUsers = getDbUsers
+module.exports.insertUser = insertUser

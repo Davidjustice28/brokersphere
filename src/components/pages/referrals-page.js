@@ -11,7 +11,7 @@ function ReferralPage(props) {
             <div id = "referral-list">
             {referralArray.map((referral) => {
                 return (
-                    <div className="referral" onClick={() => this.props.leadFunc(referral)}>
+                    <div className="referral" onClick={() => props.leadFunc(referral)}>
                         <div>
                             <p>Agent: {referral.Agent}</p>
                             <p>Type: {referral.Type}</p>

@@ -1,11 +1,8 @@
-import React, {useEffect} from "react";
+import React from "react";
 import Header from "../header";
 import "../../styles/search-page.css"
 
 function AgentSearchPage(props){
-    useEffect(() => {
-        props.loadfunc()
-    }, [])
     return (
         <div id="agentsearch-page">
             <Header leftIcon ="arrow_back" pageName="Agent Search" backFunc ={props.backFunc}/>
