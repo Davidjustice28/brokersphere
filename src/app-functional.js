@@ -1,7 +1,4 @@
-import { db } from "./firebase-config";
-import { collection, addDoc } from "firebase/firestore";
-import { storage } from "./firebase-config";
-import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
+import axios from "axios";
 import LoginPage from "./components/pages/login-page";
 import Dashboard from "./components/dashboard";
 import AboutScreen from "./components/about-screen";
@@ -20,19 +17,23 @@ import Photo2 from "./components/images/IMG_1049.jpg";
 import Photo3 from "./components/images/IMG_3396.jpg"
 import LittlemillPhoto from "../src/components/images/852littlemill.JPG";
 import HiddenPhoto from "../src/components/images/121hidden.jpg";
-import React, { useState, useEffect, useContext } from "react";
-import { async } from "@firebase/util";
+import React, { useState, useEffect, useContext, createContext } from "react";
+
+
+export const imageContext = createContext('empty')
 
 export default function App() {
+    // Test api with new variables
+
+    const [dbUsers, setDbUsers] = useState([])
+    const [dbReferrals,setDbReferrals] = useState([])
+    const [dbListings,setDbListings] = useState([])
     // Declare and initialize state and setter functions
 
     const [page, setPage] = useState('dashboard')
     const [LoggedUser, setLoggedUser] = useState(null)
     const [signuppage, setSignupPage] = useState(false)
-    const [usersRef, setUsersRef] = useState(collection(db, "users"))
-    const [imageUpload, setImageUpload] = useState(null)
-    const [imageList, setImageList] = useState([])
-    const [imageListRef, setImageListRef] = useState(storage, "images/")
+    const [imageUpload, setImageUpload] = useState('empty')
     const [loggedIn, setLoggedIn] = useState(false)
     const [userprofile, setUserProfile] = useState(false)
     const [searcheduserprofile, setSearchedUserProfile] = useState(false)
@@ -156,7 +157,28 @@ export default function App() {
         }
     ])
 
-    //Declare functions
+
+    //api interaction
+
+    async function getDbUsers() {
+        let response = await fetch('https://blooming-forest-72615.herokuapp.com/api/users')
+        let users = await response.json()
+        setDbUsers(await users)
+    }
+
+    async function getDbReferrals() {
+        let response = await fetch('https://blooming-forest-72615.herokuapp.com/api/referrals')
+        let referrals = await response.json()
+        setDbReferrals(await referrals)
+    }
+
+    async function getDbListings() {
+        let response = await fetch('https://blooming-forest-72615.herokuapp.com/api/listings')
+        let listings = await response.json()
+        setDbListings(await listings)
+    }
+
+    //Application functions
 
     function signupOrLogin() {
         if (signuppage === true) {
@@ -166,57 +188,43 @@ export default function App() {
         }
     }
 
-    function createUser() {
-        listAll(imageListRef).then((response) => {
-            response.items.forEach((item) => {
-                getDownloadURL(item).then((url) => {
-                    setImageList((prev => prev.concat(url)))
-                })
-            })
-        }).then(() => {
-            console.log(imageList)
-        }).then(() => {
-            return new Promise((resolve, reject) => {
+    async function createUser() {
+            return new Promise(async (resolve, reject) => {
                 if(!(document.getElementById("email-signup").innerText == null)) {
-                    setTimeout(() => {
-                        setUsers((prev) => prev.concat({
-                            Name: document.getElementById("fullname-signup").value,
-                            Username: document.getElementById("username-signup").value,
-                            Email: document.getElementById("email-signup").value,
-                            Password: document.getElementById("password-signup").value,
-                            Bio: document.getElementById("bio-signup").value,
-                            Photo: imageList[0],
-                            Tags: [document.getElementById("tags-input").value],
-                            State: document.getElementById("state-signup").value,
-                            Leads: []
-                            })
-                        )
-                        resolve(users)  
-                    }, 1000);
-
+                    let newUser = {
+                        Name: document.getElementById("fullname-signup").value,
+                        Username: document.getElementById("username-signup").value,
+                        Email: document.getElementById("email-signup").value,
+                        Password: document.getElementById("password-signup").value,
+                        Bio: document.getElementById("bio-signup").value,
+                        Photo: imageUpload,
+                        Tags: [document.getElementById("tags-input").value],
+                        State: document.getElementById("state-signup").value,
+                        Leads: []
+                    }
+                    
+                    const options = {
+                        method: 'post',
+                        data: newUser
+                    }
+                    await axios.post('https://blooming-forest-72615.herokuapp.com/api/users', newUser)
+                    .then(async () => {
+                         await getDbUsers()
+                    }).catch((err)  => console.log(err))
+                    resolve()  
+    
                 } 
                 else {
                     return
                 }
-        }).then((array) => {
-            setTimeout(() => {
-                new Promise((resolve, reject) => {
-                    setLoggedUser(users[users.length -1])
-                }).then(() => {
-                    addDoc(collection(db, "users"),LoggedUser);
-                })
-            }, 1000);
-        }).then(() => {
-            setTimeout(() => {
+            }).then(() => {
                 loginUser()
-            },500)  
-        })
-    
-      })
+            })
     }
 
-    function createReferral() {
+    async function createReferral() {
         if (!(document.getElementById("name-input").innerText == null)) {
+            /*
             let updatedReferrals = referrals.concat({
                 Agent: LoggedUser.Name,
                 Type: document.getElementById("type-input").value,
@@ -229,27 +237,41 @@ export default function App() {
                 Name: document.getElementById("name-input").value,
                 Notes: document.getElementById("notes-input").value
             })
+
             setReferrals(updatedReferrals)
             setPage('referralpage')
+            */
+
+            // post request to api
+            let newReferral = {
+                Agent: LoggedUser.Name,
+                Type: document.getElementById("type-input").value,
+                Location: document.getElementById("location-input").value,
+                Financing: document.getElementById("financing-input").value,
+                Budget: document.getElementById("budget-input").value,
+                Email: document.getElementById("email-input").value,
+                Number: document.getElementById("number-input").value,
+                Fee: document.getElementById("fee-input").value,
+                Name: document.getElementById("name-input").value,
+                Notes: document.getElementById("notes-input").value
+            }
+            const options = {
+                method: 'post',
+                data: {
+                    Referral: newReferral
+                }
+            }
+            await axios.post('https://blooming-forest-72615.herokuapp.com/api/referrals',newReferral)
+            .then(async() => {
+                await getDbReferrals()
+                setPage('referralpage')
+            })
         } else {
             return
         }
     }
 
-    const uploadImage = () => {
-        if (imageUpload == null) return
-        const imageRef = ref(storage, `images/${imageUpload.name}`)
-        uploadBytes(imageRef, imageUpload).then((response) => {
-            alert("photo is uploaded")
-        })
-
-    }
-
-    const changeImage = (event) => {
-        setImageUpload(event.target.files[0])
-    }
-
-
+    
     function loginUser() {
         setLoggedIn(true)
     }
@@ -260,7 +282,7 @@ export default function App() {
     }
 
     function getUser() {
-        users.forEach(element => {
+        dbUsers.forEach(element => {
             if (element.Email === document.getElementById("email-login").value && element.Password === document.getElementById("password-login").value) {
                 setLoggedUser(element)
                 console.log('match found for log in')
@@ -273,12 +295,21 @@ export default function App() {
     }
 
     function searchResults() {
-        users.forEach((user) => {
+        /*
+        dbUsers.forEach((user) => {
             if (user.State === document.getElementById("state-input").value) {
                 let results = searchresults.concat(user)
                 setSearchResults(results)
             }
         })
+        */
+        let results = dbUsers.filter((user) => {
+            return user.State === document.getElementById("state-input").value
+        })
+            setSearchResults(results)
+            console.log(searchResults)
+        
+
         setPage('agentresultspage')
     }
 
@@ -290,16 +321,40 @@ export default function App() {
         }, 500)
     }
 
-    function deleteReferral(referral) {
+    async function deleteReferral(referral) {
+        const options = {
+            method: 'delete',
+            data: {
+                Referral:referral
+            }
+        }
+        axios.delete('https://blooming-forest-72615.herokuapp.com/api/referrals', options)
+        .then(() => getDbReferrals());
+        /*
         setReferrals(referrals.filter((value, index, arr) => {
             return !(value === referral)
         }))
         setTimeout(() => {
             console.log(referrals)
         }, 1000);
+        */
     }
 
     function addLead(referral) {
+
+        const options = {
+            method: 'delete',
+            data: {
+                user:LoggedUser,
+                Referral:referral
+            }
+        }
+        axios.put('https://blooming-forest-72615.herokuapp.com/api/leads', options)
+        .then(() => {
+            deleteReferral(referral)
+        })
+
+        /*
         setLoggedUser({
             Name: LoggedUser.Name,
             Email: LoggedUser.Email,
@@ -319,9 +374,32 @@ export default function App() {
                 deleteReferral(referral)
             }, 250);
         }, 500);
+        */
     }
 
-    function addListing(i,a,p,bd,bth,s,t,c) {
+    async function addListing(i,a,p,bd,bth,s,t,c) {
+        let newListings = {
+            img: i,
+            address: a,
+            price: p,
+            bedrooms: bd,
+            bathrooms: bth,
+            squarefeet: s,
+            taxes: t,
+            condition: c,
+            likes: 0,
+            dislikes: 0,
+            agent: LoggedUser.Name
+        }
+        
+        await axios.post('https://blooming-forest-72615.herokuapp.com/api/listings',newListings)
+        .then(async() => {
+            await getDbListings()
+        }).then(() => {
+            setPage('listingspage')
+        })
+
+        /*
         setListings((prev) => prev.concat({
             img: i,
             address: a,
@@ -335,10 +413,11 @@ export default function App() {
             dislikes: 0,
             agent: LoggedUser.Name
         }))
+        */
     }
     
     function changeListing() {
-        if(index < listings.length -1 || index === 0) {
+        if(index < dbListings.length -1 || index === 0) {
             setIndex((prev) => prev + 1)
             setTimeout(() => {
               console.log(index)
@@ -362,17 +441,39 @@ export default function App() {
       }
     
     function likeordislike(index, choice) {
-        const updatedListings = [...listings]
+        const updatedListings = [...dbListings]
         if(choice === "like") {
           updatedListings[index].likes = updatedListings[index].likes + 1
-          setListings(updatedListings)
+          setDbListings(updatedListings)
         }else {
           updatedListings[index].dislikes = updatedListings[index].dislikes + 1
-          setListings(updatedListings)
+          setDbListings(updatedListings)
         } 
       }
     
     function newComment() {
+
+        const newComment = {
+            sender: LoggedUser.Username,
+            message: document.getElementById("comment-input").value
+        }
+        const options = {
+            method: 'put',
+            data: {
+                listing:LoggedUser,
+                comment:newComment
+            }
+        }
+        axios.put('https://blooming-forest-72615.herokuapp.com/api/listings/comment', options)
+        .then(async () => {
+            await getDbListings()
+            setPage('listingspage')
+        }).then(() => {
+            document.getElementById("comment-input").value = " "
+            document.getElementById("new-commentdiv").style.display = "none"
+        })
+
+        /*
         console.log(document.getElementById("comment-input").value)
         const array = listings
         array[index].comments.push({
@@ -382,16 +483,41 @@ export default function App() {
         setListings(array)
         document.getElementById("comment-input").value = " "
         document.getElementById("new-commentdiv").style.display = "none"
-      }
+        */
+    }
+
+    //useEffect to load users
+
+    useEffect(() => {
+
+        //shows that api is working 
+        getDbUsers()
+        getDbReferrals()
+        getDbListings()
+    },[])
+
+    useEffect(() => {
+        console.log(dbUsers)
+        console.log(dbReferrals)
+        console.log(dbListings)
+    },[dbUsers,dbReferrals,dbListings])
+
+    useEffect(()=> {
+        setLoggedUser(dbUsers[dbUsers.length -1])
+    },[dbUsers])
 
 
     //Return jsx
     if (loggedIn === false) {
         if (signuppage === false) {
-            return <LoginPage func={getUser} array={users} func2={signupOrLogin} />
+            return <LoginPage func={getUser} array={dbUsers} func2={signupOrLogin} />
         }
         else {
-            return <SignupPage func1={createUser} func2={signupOrLogin} change={changeImage} upload={uploadImage} />
+            return (
+                <imageContext.Provider value={[imageUpload,setImageUpload]}>
+                    <SignupPage func1={createUser} func2={signupOrLogin}  setImage = {setImageUpload} />
+                </imageContext.Provider>
+            )
         }
     }
     else {
@@ -411,7 +537,7 @@ export default function App() {
             return <LeadPage backFunc={() => setPage('dashboard')} leads={LoggedUser.Leads} />
         }
         else if (page === 'referralpage') {
-            return <ReferralPage backFunc={() => setPage('dashboard')} referrals={referrals} addFunc={() => setPage('newreferralpage') } leadFunc={addLead} />
+            return <ReferralPage backFunc={() => setPage('dashboard')} referrals={dbReferrals} addFunc={() => setPage('newreferralpage') } leadFunc={addLead} />
         }
         else if (page === 'newreferralpage') {
             return <NewReferralForm backFunc={() => setPage('referralpage')} createFunc={createReferral} />
@@ -426,7 +552,7 @@ export default function App() {
             return <Feed backFunc={() => setPage('dashboard')} />
         }
         else if (page === 'listingspage') {
-            return <ListingsPage commentFunc={newComment} backFunc={() => setPage('dashboard')} listings={listings} index={index} reverse={backListing} forward={changeListing} likefunc={likeordislike} />
+            return <ListingsPage commentFunc={newComment} backFunc={() => setPage('dashboard')} listings={dbListings} index={index} reverse={backListing} forward={changeListing} likefunc={likeordislike} />
         }
     }
 }

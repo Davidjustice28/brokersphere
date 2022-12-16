@@ -1,15 +1,37 @@
+import React,{useEffect, useRef, useState,useContext} from "react"
+import axios from "axios"
+import { imageContext } from "../../app-functional"
 import Image from "../images/titlelogo-transparent.PNG"
 import "../../styles/signup-page.css"
 
-function SignupPage(props) { 
+function SignupPage(props) {
+
+    const [url,setUrl] = useContext(imageContext) 
+
+    const imageInputRef = useRef()
+    function upload(e) {
+        console.log(e.target.files[0])
+        const data = new FormData()
+        data.append('file', e.target.files[0])
+        axios.post("https://blooming-forest-72615.herokuapp.com/uploadImage", data, { 
+        // receive two    parameter endpoint url ,form data
+         })
+        .then(res => { // then print response status
+             console.log(res.data)
+             setUrl(res.data.url)
+        })
+        
+    }
+
+    useEffect(() => {
+        console.log(url)
+    },[url])
+    
     return (
         <div id="signup-page">
             <img src={Image} alt="logo"></img>
             <h1>Join the Ecosystem</h1>
-            <div id="photoupload-div">
-                <input type="file" accept="image/*" onChange={props.change}></input>
-                <button onClick={props.upload}>Upload</button>
-            </div>
+                <input type="file" accept="image/*" id="image-upload" ref={imageInputRef} name ="image" onChange={upload}></input>
             <form>
                 <label htmlFor="username-signup">Username</label>
                 <input id="username-signup" placeholder="Enter Desired Username"></input>
