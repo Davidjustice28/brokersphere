@@ -32,7 +32,7 @@ function SignupPage(props) {
         <div id="signup-page">
             <img src={Image} alt="logo"></img>
             <h1>Join the Ecosystem</h1>
-                <input type="file" accept="image/*" id="image-upload" ref={imageInputRef} name ="image" onChange={upload}></input>
+                <label id="image-label"><span className="material-symbols-outlined">add_a_photo</span>Upload Profile Photo<input type="file" accept="image/*" id="image-upload" ref={imageInputRef} name ="image" onChange={upload}></input></label>
             <form>
                 <label htmlFor="username-signup">Username</label>
                 <input id="username-signup" placeholder="Enter Desired Username"></input>

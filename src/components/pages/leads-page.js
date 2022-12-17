@@ -22,7 +22,7 @@ export default function LeadPage(props) {
                     return (
                         <div className="lead-div">
                             <p>{lead.Name}</p>
-                            <span className="material-symbols-outlined" onClick={() => showDetails(lead)}>assignment</span>
+                            <span  className="material-symbols-outlined" onClick={() => showDetails(lead)}>assignment</span>
                         </div>
                     )
                 })}

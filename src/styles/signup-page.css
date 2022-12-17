@@ -46,7 +46,7 @@
 }
 
 #signup-page form button {
-    background-color: lightblue;
+    background-color: #0277bd;
     color: white;
     border-radius: 10px;
     position: relative;
@@ -70,4 +70,38 @@
     border-radius: 0%;
     border: 1px solid black;
     width: 25%;
+}
+
+#image-upload {
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+#image-label {
+    border: 2px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 3px;
+    width: 200px;
+    gap: 10px;
+    font-weight: bold;
+    opacity: 0.9;
+    border-radius: 5px;
+    background-color: silver;
+    font-size: small;
+}
+
+#image-label span {
+    color: #0277bd
+}
+
+#image-label:active {
+    transform: scale(1.1);
 }

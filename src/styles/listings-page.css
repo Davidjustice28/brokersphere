@@ -152,5 +152,22 @@
     display: none;
 }
 
+#listing-h1, #listing-div1 {
+    cursor: pointer;
+}
 
 
+@media (max-width:500px) {
+    .listing-comment {
+        padding: 5px;
+    }
+    .listing-comment h1 {
+        font-size: 10px;
+    }
+    .listing-comment p {
+        font-size: 12px;
+    }
+    #listing-buttons {
+        width: 92%;
+    }
+}

@@ -70,3 +70,9 @@ h1 {
 #referral-addbutton span {
     transform: scale(1.5);
 }
+
+@media (max-width:500px) {
+    #referral-addbutton {
+        left:82%;
+    }
+}
