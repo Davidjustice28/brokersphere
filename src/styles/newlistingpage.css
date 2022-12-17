@@ -1,0 +1,57 @@
+#feed-page #imagediv {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 25vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#imagediv img {
+    width: 300px;
+    height: 200px;
+    object-fit: cover;
+
+}
+
+#newlisting-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 95%;
+}
+
+#newlisting-form input {
+    border: 2px solid black;
+
+}
+
+
+
+#listingphoto-upload {
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+#test-label {
+    border: 2px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 7px;
+    border-radius: 25px;
+    width: 80px;
+
+}
+
+#newlisting-form button {
+    font-size: smaller;
+    margin-top: 10px;
+    border: 2px solid black;
+}

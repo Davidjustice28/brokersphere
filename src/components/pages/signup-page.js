@@ -13,6 +13,7 @@ function SignupPage(props) {
         console.log(e.target.files[0])
         const data = new FormData()
         data.append('file', e.target.files[0])
+        //"https://blooming-forest-72615.herokuapp.com/uploadImage"
         axios.post("https://blooming-forest-72615.herokuapp.com/uploadImage", data, { 
         // receive two    parameter endpoint url ,form data
          })

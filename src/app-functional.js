@@ -9,7 +9,7 @@ import ReferralPage from "./components/pages/referrals-page";
 import NewReferralForm from "./components/pages/new-referralform";
 import AgentResultsPage from "./components/pages/agentresults-page";
 import SearchedUserProfile from "./components/pages/searcheduser-profile";
-import Feed from "./components/pages/feed";
+import NewListingPage from "./components/pages/newlistingpage";
 import ListingsPage from "./components/pages/listings-page";
 import SignupPage from "./components/pages/signup-page";
 import Photo1 from "./components/images/david-justice.jpg";
@@ -32,6 +32,8 @@ export default function App() {
 
     const [page, setPage] = useState('dashboard')
     const [LoggedUser, setLoggedUser] = useState(null)
+    const [loggedId,setLoggedId] = useState('empty')
+    const [justCommented,setJustCommented] = useState(false)
     const [signuppage, setSignupPage] = useState(false)
     const [imageUpload, setImageUpload] = useState('empty')
     const [loggedIn, setLoggedIn] = useState(false)
@@ -193,14 +195,14 @@ export default function App() {
                 if(!(document.getElementById("email-signup").innerText == null)) {
                     let newUser = {
                         Name: document.getElementById("fullname-signup").value,
-                        Username: document.getElementById("username-signup").value,
+                        Username: '@'+document.getElementById("username-signup").value,
                         Email: document.getElementById("email-signup").value,
                         Password: document.getElementById("password-signup").value,
                         Bio: document.getElementById("bio-signup").value,
                         Photo: imageUpload,
                         Tags: [document.getElementById("tags-input").value],
                         State: document.getElementById("state-signup").value,
-                        Leads: []
+                        leads: []
                     }
                     
                     const options = {
@@ -309,7 +311,7 @@ export default function App() {
             setSearchResults(results)
             console.log(searchResults)
         
-
+        let stateSearch = document.getElementById("state-input")
         setPage('agentresultspage')
     }
 
@@ -328,7 +330,7 @@ export default function App() {
                 Referral:referral
             }
         }
-        axios.delete('https://blooming-forest-72615.herokuapp.com/api/referrals', options)
+        await axios.delete('https://blooming-forest-72615.herokuapp.com/api/referrals', options)
         .then(() => getDbReferrals());
         /*
         setReferrals(referrals.filter((value, index, arr) => {
@@ -340,46 +342,32 @@ export default function App() {
         */
     }
 
-    function addLead(referral) {
-
+    async function addLead(referral) {
+        let userId = LoggedUser._id
         const options = {
-            method: 'delete',
+            method: 'put',
             data: {
-                user:LoggedUser,
+                id: userId,
                 Referral:referral
             }
         }
-        axios.put('https://blooming-forest-72615.herokuapp.com/api/leads', options)
-        .then(() => {
+        console.log(options)
+        
+        await axios.put('https://blooming-forest-72615.herokuapp.com/api/users/leads', options)
+        .then(async () => {
             deleteReferral(referral)
+            await getDbUsers()
+            console.log('lead added. waiting for user data to refresh')
+            setLoggedId(userId)
         })
-
-        /*
-        setLoggedUser({
-            Name: LoggedUser.Name,
-            Email: LoggedUser.Email,
-            Password: LoggedUser.Password,
-            Username: LoggedUser.Username,
-            Photo: LoggedUser.Photo,
-            Bio: LoggedUser.Bio,
-            State: LoggedUser.State,
-            Tags: LoggedUser.Tags,
-            Leads: LoggedUser.Leads.concat(referral)
+        .catch((err) => {
+            console.log(err)
         })
-
-        console.log("Accepted referral lead")
-        setTimeout(() => {
-            console.log(LoggedUser.Leads)
-            setTimeout(() => {
-                deleteReferral(referral)
-            }, 250);
-        }, 500);
-        */
     }
 
-    async function addListing(i,a,p,bd,bth,s,t,c) {
+    async function addListing(a,p,bd,bth,s,t,c,w) {
         let newListings = {
-            img: i,
+            img: imageUpload,
             address: a,
             price: p,
             bedrooms: bd,
@@ -389,9 +377,10 @@ export default function App() {
             condition: c,
             likes: 0,
             dislikes: 0,
-            agent: LoggedUser.Name
+            agent: LoggedUser.Name,
+            website:w
         }
-        
+        //https://blooming-forest-72615.herokuapp.com/api/listings
         await axios.post('https://blooming-forest-72615.herokuapp.com/api/listings',newListings)
         .then(async() => {
             await getDbListings()
@@ -451,7 +440,7 @@ export default function App() {
         } 
       }
     
-    function newComment() {
+    async function newComment(Listing) {
 
         const newComment = {
             sender: LoggedUser.Username,
@@ -460,14 +449,17 @@ export default function App() {
         const options = {
             method: 'put',
             data: {
-                listing:LoggedUser,
+                listing:Listing,
                 comment:newComment
             }
         }
-        axios.put('https://blooming-forest-72615.herokuapp.com/api/listings/comment', options)
+
+        //https://blooming-forest-72615.herokuapp.com/
+        await axios.put('https://blooming-forest-72615.herokuapp.com/api/listings/comment', options)
         .then(async () => {
             await getDbListings()
-            setPage('listingspage')
+            setPage('dashboard')
+            setJustCommented(true)
         }).then(() => {
             document.getElementById("comment-input").value = " "
             document.getElementById("new-commentdiv").style.display = "none"
@@ -504,7 +496,22 @@ export default function App() {
 
     useEffect(()=> {
         setLoggedUser(dbUsers[dbUsers.length -1])
+        if(page === 'referralpage') {
+            dbUsers.forEach((user) => {
+                if(user._id == loggedId) {
+                    setLoggedUser(user)
+                }
+            })
+            setPage('dashboard')
+        }
     },[dbUsers])
+
+    useEffect(() => {
+        if(justCommented == true) {
+            setPage('listingspage')
+        }
+    },[dbListings])
+    
 
 
     //Return jsx
@@ -522,7 +529,7 @@ export default function App() {
     }
     else {
         if (page === 'dashboard') {
-            return <Dashboard listingsFunc={() => setPage('listingspage')} aboutFunc={() => setPage('aboutpage')} profileFunc={() => setPage('userprofile')} searchFunc={() => { setPage('agentsearchpage'); setSearchResults([]) }} leadFunc={() => setPage('leadpage')} referralFunc={() => setPage('referralpage')} feedFunc={() => setPage('feedpage')} logout={logoutUser} />
+            return <Dashboard listingsFunc={setPage} aboutFunc={() => setPage('aboutpage')} profileFunc={() => setPage('userprofile')} searchFunc={() => { setPage('agentsearchpage'); setSearchResults([]) }} leadFunc={() => setPage('leadpage')} referralFunc={() => setPage('referralpage')} feedFunc={() => setPage('newlistingpage')} logout={logoutUser} />
         }
         else if (page === 'aboutpage') {
             return <AboutScreen backFunc={() => setPage('dashboard')} />
@@ -534,7 +541,7 @@ export default function App() {
             return <AgentSearchPage searchFunc={searchResults} backFunc={() => setPage('dashboard')} />
         }
         else if (page === 'leadpage') {
-            return <LeadPage backFunc={() => setPage('dashboard')} leads={LoggedUser.Leads} />
+            return <LeadPage backFunc={() => setPage('dashboard')} leads={LoggedUser.leads} />
         }
         else if (page === 'referralpage') {
             return <ReferralPage backFunc={() => setPage('dashboard')} referrals={dbReferrals} addFunc={() => setPage('newreferralpage') } leadFunc={addLead} />
@@ -548,8 +555,12 @@ export default function App() {
         else if (page === 'searcheduserprofile') {
             return <SearchedUserProfile backFunc={() => setPage('agentresultspage')} user={searcheduser} />
         }
-        else if (page === 'feedpage') {
-            return <Feed backFunc={() => setPage('dashboard')} />
+        else if (page === 'newlistingpage') {
+            return (
+                <imageContext.Provider value={[imageUpload,setImageUpload]}>
+                    <NewListingPage backFunc={() => setPage('dashboard')} func1 ={addListing} />
+                </imageContext.Provider>
+            )
         }
         else if (page === 'listingspage') {
             return <ListingsPage commentFunc={newComment} backFunc={() => setPage('dashboard')} listings={dbListings} index={index} reverse={backListing} forward={changeListing} likefunc={likeordislike} />

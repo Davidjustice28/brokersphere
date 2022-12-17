@@ -8,7 +8,7 @@ import photo from "../components/images/main-logo.PNG"
 function  Dashboard(props) {
     return (
         <div id="dashboard">
-            <DashboardHeader image = {photo} func ={props.feedFunc} func2 = {props.listingsFunc}/>
+            <DashboardHeader image = {photo} func ={props.feedFunc} func2={props.listingsFunc}/>
             <div id="dash-title" >
                 <h1>Dashboard</h1>
             </div>

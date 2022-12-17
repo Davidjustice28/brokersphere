@@ -9,7 +9,7 @@ function AgentSearchPage(props){
             <form>
                 <label htmlFor="state-input">State of License:</label>
                 <input type="text" id="state-input" placeholder="New Jersey, New York, Etc."></input>
-                <button type="button" onClick={props.searchFunc}><span className="material-symbols-outlined">search</span> SEARCH</button>
+                <button type="button" onClick={props.searchFunc}><span className="material-symbols-outlined">search</span>SEARCH</button>
 
             </form>
         </div>

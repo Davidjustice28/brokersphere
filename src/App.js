@@ -13,7 +13,7 @@ import ReferralPage from "./components/pages/referrals-page";
 import NewReferralForm from "./components/pages/new-referralform";
 import AgentResultsPage from "./components/pages/agentresults-page";
 import SearchedUserProfile from "./components/pages/searcheduser-profile";
-import Feed from "./components/pages/feed";
+import NewListingPage from "./components/pages/newlistingpage";
 import ListingsPage from "./components/pages/listings-page";
 import SignupPage from "./components/pages/signup-page";
 import Photo1 from "./components/images/david-justice.jpg";
@@ -553,7 +553,7 @@ class App extends Component {
         return <SearchedUserProfile backFunc = {this.displayAgentResultsPage} user = {this.state.searcheduser}/>
       }
       else if(this.state.feedpage === true) {
-        return <Feed backFunc = {this.displayDashboard} />
+        return <NewListingPage backFunc = {this.displayDashboard} />
       }
       else if(this.state.listingspage === true) {
         return <ListingsPage commentFunc = {this.newComment} backFunc = {this.displayDashboard} listings = {this.state.listings} index = {this.state.index} reverse = {this.backListing} forward = {this.changeListing} likefunc = {this.likeordislike}/>

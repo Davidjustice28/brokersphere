@@ -5,9 +5,10 @@
 }
 #listing-display {
     width: 75%;
-    border: 1px solid black;
+    border: 2px solid black;
     border-radius: 10px;
     margin-top: 25px;
+    box-shadow: 4px 4px 4px silver, -4px -4px 4px silver
     
 }
 
@@ -41,6 +42,7 @@
 
 #listing-buttons span:active {
     transform: scale(1.1);
+    color: #0277bd
 }
 
 #listing-display h1 {
@@ -121,3 +123,34 @@
     padding: 10px;
     border-radius: 20px;
 }
+
+#moreinfo-div {
+    display: none;
+    width: 75%;
+    border: 2px solid black;
+    border-radius: 10px;
+    margin-top: 25px;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 25px;
+    box-shadow: 4px 4px 4px silver, -4px -4px 4px silver
+}
+
+#moreinfo-div p {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    text-decoration: underline;
+}
+
+#listing-display:active {
+    transform: scale(1.02);
+    box-shadow:5px 5px 5px #0277bd, -5px -5px 5px #0277bd;
+}
+
+#lessinfo-button {
+    display: none;
+}
+
+
+
