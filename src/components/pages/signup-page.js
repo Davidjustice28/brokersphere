@@ -14,7 +14,7 @@ function SignupPage(props) {
         const data = new FormData()
         data.append('file', e.target.files[0])
         //"https://blooming-forest-72615.herokuapp.com/uploadImage"
-        axios.post("https://blooming-forest-72615.herokuapp.com/uploadImage", data, { 
+        axios.post("https://brokersphere-api.fly.dev/api/uploadImage", data, { 
         // receive two    parameter endpoint url ,form data
          })
         .then(res => { // then print response status

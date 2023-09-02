@@ -19,6 +19,7 @@ import LittlemillPhoto from "../src/components/images/852littlemill.JPG";
 import HiddenPhoto from "../src/components/images/121hidden.jpg";
 import React, { useState, useEffect, useContext, createContext } from "react";
 
+const apiBaseUrl =  "https://brokersphere-api.fly.dev"
 
 export const imageContext = createContext('empty')
 
@@ -163,19 +164,19 @@ export default function App() {
     //api interaction
 
     async function getDbUsers() {
-        let response = await fetch('https://blooming-forest-72615.herokuapp.com/api/users')
+        let response = await fetch('https://brokersphere-api.fly.dev/api/users')
         let users = await response.json()
         setDbUsers(await users)
     }
 
     async function getDbReferrals() {
-        let response = await fetch('https://blooming-forest-72615.herokuapp.com/api/referrals')
+        let response = await fetch('https://brokersphere-api.fly.dev/api/referrals')
         let referrals = await response.json()
         setDbReferrals(await referrals)
     }
 
     async function getDbListings() {
-        let response = await fetch('https://blooming-forest-72615.herokuapp.com/api/listings')
+        let response = await fetch('https://brokersphere-api.fly.dev/api/listings')
         let listings = await response.json()
         setDbListings(await listings)
     }
@@ -209,7 +210,7 @@ export default function App() {
                         method: 'post',
                         data: newUser
                     }
-                    await axios.post('https://blooming-forest-72615.herokuapp.com/api/users', newUser)
+                    await axios.post('https://brokersphere-api.fly.dev/api/users', newUser)
                     .then(async () => {
                          await getDbUsers()
                     }).catch((err)  => console.log(err))
@@ -263,7 +264,7 @@ export default function App() {
                     Referral: newReferral
                 }
             }
-            await axios.post('https://blooming-forest-72615.herokuapp.com/api/referrals',newReferral)
+            await axios.post('https://brokersphere-api.fly.dev/api/referrals',newReferral)
             .then(async() => {
                 await getDbReferrals()
                 setPage('referralpage')
@@ -330,7 +331,7 @@ export default function App() {
                 Referral:referral
             }
         }
-        await axios.delete('https://blooming-forest-72615.herokuapp.com/api/referrals', options)
+        await axios.delete('https://brokersphere-api.fly.dev/api/referrals', options)
         .then(() => getDbReferrals());
         /*
         setReferrals(referrals.filter((value, index, arr) => {
@@ -353,7 +354,7 @@ export default function App() {
         }
         console.log(options)
         
-        await axios.put('https://blooming-forest-72615.herokuapp.com/api/users/leads', options)
+        await axios.put('https://brokersphere-api.fly.dev/api/users/leads', options)
         .then(async () => {
             deleteReferral(referral)
             await getDbUsers()
@@ -381,7 +382,7 @@ export default function App() {
             website:w
         }
         //https://blooming-forest-72615.herokuapp.com/api/listings
-        await axios.post('https://blooming-forest-72615.herokuapp.com/api/listings',newListings)
+        await axios.post('https://brokersphere-api.fly.dev/api/listings',newListings)
         .then(async() => {
             await getDbListings()
         }).then(() => {
@@ -455,7 +456,7 @@ export default function App() {
         }
 
         //https://blooming-forest-72615.herokuapp.com/
-        await axios.put('https://blooming-forest-72615.herokuapp.com/api/listings/comment', options)
+        await axios.put('https://brokersphere-api.fly.dev/api/listings/comment', options)
         .then(async () => {
             await getDbListings()
             setPage('dashboard')
