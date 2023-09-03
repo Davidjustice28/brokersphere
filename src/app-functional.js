@@ -196,7 +196,7 @@ export default function App() {
                 if(!(document.getElementById("email-signup").innerText == null)) {
                     let newUser = {
                         Name: document.getElementById("fullname-signup").value,
-                        Username: '@'+document.getElementById("username-signup").value,
+                        Username: document.getElementById("username-signup").value,
                         Email: document.getElementById("email-signup").value,
                         Password: document.getElementById("password-signup").value,
                         Bio: document.getElementById("bio-signup").value,
@@ -227,24 +227,6 @@ export default function App() {
 
     async function createReferral() {
         if (!(document.getElementById("name-input").innerText == null)) {
-            /*
-            let updatedReferrals = referrals.concat({
-                Agent: LoggedUser.Name,
-                Type: document.getElementById("type-input").value,
-                Location: document.getElementById("location-input").value,
-                Financing: document.getElementById("financing-input").value,
-                Budget: document.getElementById("budget-input").value,
-                Email: document.getElementById("email-input").value,
-                Number: document.getElementById("number-input").value,
-                Fee: document.getElementById("fee-input").value,
-                Name: document.getElementById("name-input").value,
-                Notes: document.getElementById("notes-input").value
-            })
-
-            setReferrals(updatedReferrals)
-            setPage('referralpage')
-            */
-
             // post request to api
             let newReferral = {
                 Agent: LoggedUser.Name,
@@ -298,14 +280,6 @@ export default function App() {
     }
 
     function searchResults() {
-        /*
-        dbUsers.forEach((user) => {
-            if (user.State === document.getElementById("state-input").value) {
-                let results = searchresults.concat(user)
-                setSearchResults(results)
-            }
-        })
-        */
         let results = dbUsers.filter((user) => {
             return user.State === document.getElementById("state-input").value
         })
@@ -333,14 +307,6 @@ export default function App() {
         }
         await axios.delete('https://brokersphere-api.fly.dev/api/referrals', options)
         .then(() => getDbReferrals());
-        /*
-        setReferrals(referrals.filter((value, index, arr) => {
-            return !(value === referral)
-        }))
-        setTimeout(() => {
-            console.log(referrals)
-        }, 1000);
-        */
     }
 
     async function addLead(referral) {
@@ -388,29 +354,13 @@ export default function App() {
         }).then(() => {
             setPage('listingspage')
         })
-
-        /*
-        setListings((prev) => prev.concat({
-            img: i,
-            address: a,
-            price: p,
-            bedrooms: bd,
-            bathrooms: bth,
-            squarefeet: s,
-            taxes: t,
-            condition: c,
-            likes: 0,
-            dislikes: 0,
-            agent: LoggedUser.Name
-        }))
-        */
     }
     
     function changeListing() {
         if(index < dbListings.length -1 || index === 0) {
             setIndex((prev) => prev + 1)
             setTimeout(() => {
-              console.log(index)
+              //console.log(index)
             }, 250);
         }else {
           console.log("No more listings to display")
@@ -422,7 +372,7 @@ export default function App() {
         if(index > 0) {
             setIndex((prev) => prev - 1)
           setTimeout(() => {
-            console.log(index)
+            //console.log(index)
           }, 250);
         }else {
           console.log("No previous listings to show")
@@ -465,18 +415,6 @@ export default function App() {
             document.getElementById("comment-input").value = " "
             document.getElementById("new-commentdiv").style.display = "none"
         })
-
-        /*
-        console.log(document.getElementById("comment-input").value)
-        const array = listings
-        array[index].comments.push({
-          sender: LoggedUser.Username,
-          message: document.getElementById("comment-input").value
-        })
-        setListings(array)
-        document.getElementById("comment-input").value = " "
-        document.getElementById("new-commentdiv").style.display = "none"
-        */
     }
 
     //useEffect to load users
@@ -491,8 +429,8 @@ export default function App() {
 
     useEffect(() => {
         console.log(dbUsers)
-        console.log(dbReferrals)
-        console.log(dbListings)
+        //console.log(dbReferrals)
+        //console.log(dbListings)
     },[dbUsers,dbReferrals,dbListings])
 
     useEffect(()=> {

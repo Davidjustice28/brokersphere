@@ -2,7 +2,7 @@ import Header from "../header";
 import "../../styles/listings-page.css";
 
 function ListingsPage(props) {
-    console.log(props.index)
+    //console.log(props.index)
     function displayCommentInput() {
         if (document.getElementById("new-commentdiv").style.display === "none") {
             document.getElementById("new-commentdiv").style.display = "flex"

@@ -11,17 +11,18 @@ function NewListingPage(props) {
 
     const imageInputRef = useRef()
     function upload(e) {
-        console.log(e.target.files[0])
+        //console.log(e.target.files[0])
         const data = new FormData()
         data.append('file', e.target.files[0])
-        //"https://blooming-forest-72615.herokuapp.com/uploadImage"
-        axios.post("https://brokersphere-api.fly.dev/api/uploadImage", data, { 
+        //"https://brokersphere-api.fly.dev/uploadImage"
+        axios.post("https://brokersphere-api.fly.dev/uploadImage", data, { 
         // receive two    parameter endpoint url ,form data
          })
         .then(res => { // then print response status
-             console.log(res.data)
              setUrl(res.data.url)
+             console.log(res)
         })
+        .catch(reason => console.log(reason))
         
     }
 
@@ -43,16 +44,11 @@ function NewListingPage(props) {
         props.func1(address,price,bedrooms,bathrooms,squarefeet,taxes,condition,website)
     }
 
-    useEffect(() => {
-        console.log(url)
-    }, [url])
     
-    useEffect(() => {
-        console.log(document.getElementById('website-upload').value)
-    },[])
+    // useEffect(() => {
+    //     console.log(document.getElementById('website-upload').value)
+    // },[])
 
-    // {img,address,taxes,price,bedrooms,bathrooms,squarefeet,condition,likes,dislikes,agent}
-    // addListing(i,a,p,bd,bth,s,t,c)
     return (
         <div id="feed-page">
             <Header leftIcon ="arrow_back" pageName="New Listing" backFunc ={props.backFunc}/>

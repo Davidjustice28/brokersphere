@@ -14,13 +14,13 @@ function SignupPage(props) {
         const data = new FormData()
         data.append('file', e.target.files[0])
         //"https://blooming-forest-72615.herokuapp.com/uploadImage"
-        axios.post("https://brokersphere-api.fly.dev/api/uploadImage", data, { 
+        axios.post("https://brokersphere-api.fly.dev/uploadImage", data, { 
         // receive two    parameter endpoint url ,form data
          })
         .then(res => { // then print response status
              console.log(res.data)
              setUrl(res.data.url)
-        })
+        }).catch(err => console.log(err))
         
     }
 
